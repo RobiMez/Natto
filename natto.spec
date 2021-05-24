@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['natto.py'],
-             pathex=['C:\\Users\\25198\\Desktop\\Nitai'],
+             pathex=['C:\\Users\\25198\\Desktop\\Natto'],
              binaries=[],
              datas=[],
              hiddenimports=[],

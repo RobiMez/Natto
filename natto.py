@@ -1,30 +1,26 @@
-from hentai import Hentai,Format
 import os
-from pathlib import Path
+import requests
+import threading
+import socket
+
+import concurrent.futures
 
 from tkinter import *
 from tkinter import ttk
+
 from PIL import Image
-import requests
-import threading
+from pathlib import Path
+from hentai import Hentai,Format
 
+print('\n\n\n\n\n\n\n\n\n')
+print('\n| ---- [ OK ] Imports \n')
+print('\n\n\n')
 
-
-
-
-exit_com = True
-while (exit_com):
-        
-        
-        
-        
+retry = True
+while (retry):
     try:
-        # Hanity check
-        sample_cum = Hentai(177013)
-        hentai_sane = Hentai.exists(177013)
-        print(f'Hentai sanity check : {hentai_sane}')
 
-        print('Started ... ')
+        print('Started Execution... ')
         root = Tk()
         app_width = 820
         app_height = 740
@@ -35,14 +31,25 @@ while (exit_com):
         # window size and positioning
         root.geometry(f'{app_width}x{app_height}+{int(x/2)}+{int(y/2)}')
         root.title('Natto | Stay Degenerate ')
+        
 
-        print('initing ui ...')
+        # Check current filesys directory 
+        wd = Path.cwd()
+        print("Working directory : ",Path.cwd())
+        hentai_folder_exists = Path.exists(Path.joinpath(wd,'./hentai'))
+        if hentai_folder_exists == False:
+            print("Can't find the Hentai folder near me \n  Creating one at the current working directory ...")
+            os.mkdir('hentai')
+        else : 
+            print("Hentai folder exists , All good .")
+        print('\n| ---- [ OK ] Filesystem \n')
+        
+        
+ 
         # cover_image = PhotoImage(file='def.png')
-        cover = Label(root, text="Cover image cums here")
+        cover = Label(root, text="Cover image here")
         cover_pos_x = (app_width/4)
         cover_pos_y = (app_height/8)
-        print(cover_pos_x)
-        print(cover_pos_y)
         cover.place(x=cover_pos_x-50, y=0, relwidth=1, relheight=1)
 
         def api_call():
@@ -193,13 +200,14 @@ while (exit_com):
         tags_label = Label(details_frame, textvar=tags,wraplength=250, justify="left")
         tags_label.grid(row=5, column=0, sticky="W")
         
+        print("Ui Started ...")
         root.mainloop()
         print("Dying ...")
         
-        exit_com = False
-    except TypeError as e:
-        print('Having an aneurism')
-        print(e)
+        retry = False
+    # except TypeError as e:
+    #     print('Having an aneurism')
+    #     print(e)
     except requests.exceptions.ConnectionError as e:
         print('Having an Aneurism but Publicly.')
         print(e)
