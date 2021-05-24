@@ -14,25 +14,34 @@ from hentai import Hentai,Format
 
 print('\n\n\n\n\n\n\n\n\n')
 print('\n| ---- [ OK ] Imports \n')
-print('\n\n\n')
 
-retry = True
-while (retry):
-    try:
+class natto():
+    def __init__(self):
+        print('\n| ---- [ OK ] Class inititation \n')
+        self.initialize_TPE()
+        self.add_new_thread(self.check_netbeat)
+        self.start_ui()
 
-        print('Started Execution... ')
-        root = Tk()
+    def start_ui(self):
+        self.app_init()
+        print('\n| ---- [ OK ] Ui Started \n')
+        self.start_mainloop()
+
+
+
+    def app_init(self):
+        self.root = Tk()
         app_width = 820
         app_height = 740
-        screen_width = root.winfo_screenwidth()
-        screen_height = root.winfo_screenheight()
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
         x = (screen_width / 2) - (app_width/2)
         y = (screen_height / 2) - (app_height/2)
         # window size and positioning
-        root.geometry(f'{app_width}x{app_height}+{int(x/2)}+{int(y/2)}')
-        root.title('Natto | Stay Degenerate ')
-        
+        self.root.geometry(f'{app_width}x{app_height}+{int(x/2)}+{int(y/2)}')
+        self.root.title('Natto | Stay Degenerate ')
 
+    def check_cwd(self):
         # Check current filesys directory 
         wd = Path.cwd()
         print("Working directory : ",Path.cwd())
@@ -43,106 +52,13 @@ while (retry):
         else : 
             print("Hentai folder exists , All good .")
         print('\n| ---- [ OK ] Filesystem \n')
-        
-        
- 
+    def add_ui_elements(self):
         # cover_image = PhotoImage(file='def.png')
-        cover = Label(root, text="Cover image here")
+        cover = Label(self.root, text="Cover image here")
         cover_pos_x = (app_width/4)
-        cover_pos_y = (app_height/8)
         cover.place(x=cover_pos_x-50, y=0, relwidth=1, relheight=1)
-
-        def api_call():
-            print('System call : API')
-            sauce = sauce_entry.get()
-            hentai_exists = Hentai.exists(sauce)
-
-            try:
-                if hentai_exists :
-                    dou = Hentai(sauce)
-                    print(sauce)
-                    print(dou)
-                    return dou
-                else:
-                    sauce_stat.set('Bad sauce ')
-            except TypeError as e : 
-                print(e)
-                sauce_stat.set('Temporary error ... Try again.')
-                
-        def download_dou_callback():
-            def download_pages (): 
-                print('🧪 System call : Swallow initiated   ')
-                dou = api_call()
-                download_dir = './hentai'
-                os.mkdir(download_dir + f'/{dou.title(Format.Pretty)}')
-                images = dou.image_urls
-                counter = 0
-                for image in images : 
-                    im = Image.open(requests.get(image, stream=True).raw) 
-                    im.save(f"{download_dir}/{dou.title(Format.Pretty)}/{counter}.png")
-                    print('drip')
-                    counter = counter + 1
-            threading.Thread(target=download_pages).start()
-            download_dou.config(text="Downloading ... i hope ")
-            print('started dat in another thred')
-            
-        def sauce_poured ():
-            print('🧪 System call : Sauce Poured  ')
-            hope = True
-            while hope : 
-                try:
-                    dou = api_call()
-                    print(dou.image_urls)
-                    update_cover(dou)
-                    update_desc(dou)
-                    update_button(dou)
-                    sauce_stat.set('Saucing ')
-                    hope = False
-                except TypeError as e :
-                    print('mini stroke ',e)
-
-        def update_cover(dou):
-            print('🧪 System call : Update cover ')
-            basewidth = 470
-            im = Image.open(requests.get(dou.thumbnail, stream=True).raw)
-            wpercent = (basewidth/float(im.size[0]))
-            hsize = int((float(im.size[1])*float(wpercent)))
-            im = im.resize((basewidth,hsize), Image.ANTIALIAS)
-            im.save('cover.png')
-            print(' System notice : Cover downloaded ')
-            new_cover_image = PhotoImage(file='cover.png')
-            cover.config(image=new_cover_image)
-            cover.image = new_cover_image
-            print(' System notice : Cover Changed ')
-            sauce_stat.set('Sauce poured')
-
-        def update_button(dou):
-            print('System call : Update button ')
-            sauce_frame.config(bg='whitesmoke')
-            sauce_entry.config(bg='honeydew')
-            sauceify.config(bg='azure')
-            
-        def update_desc(dou):
-            print('System call : Update description ')
-            sauce_id.set(dou.id)
-            title.set(dou.title(format=Format.Pretty))
-            title_jp.set(dou.title(format=Format.Japanese))
-            title_en.set(dou.title(format=Format.English))
-            pages.set(dou.num_pages)
-            tag_names = 'Tags : '
-
-            for tag in dou.tag:
-                tag_names = tag_names + tag.name + ' | '
-                print(tag.name)
-            tags.set(tag_names)
-            print(dou.json)
-            print(dou.title(format=Format.Pretty))
-
-        def on_enter(e):
-            sauce_poured()
-
-
-        sauce_frame = LabelFrame(root, text='Sauwuce', padx=10, pady=10)
+        
+        sauce_frame = LabelFrame(self.root, text='Sauwuce', padx=10, pady=10)
         sauce_frame.grid(row=0, column=0, padx=10, pady=10, sticky="NSEW")
         sauce_entry = Entry(sauce_frame, width=25)
         sauceify = Button(sauce_frame, text="Natto !", command=sauce_poured)
@@ -156,17 +72,13 @@ while (retry):
         sauce_entry.grid(row=0, column=0, sticky="W")
         sauceify.grid(row=0, column=1, sticky="E", padx=5, pady=5)
         
-        download_frame = LabelFrame(root, text='Dload', padx=10, pady=10)
+        download_frame = LabelFrame(self.root, text='Dload', padx=10, pady=10)
         download_frame.grid(row=2, column=0, padx=10, pady=10, sticky="NSEW")
         download_dou = Button(download_frame, text="Swallow !", command=download_dou_callback)
         download_dou.grid(row=0,column=0)
-        
-        
-        
-        
-        
-    # description frame 
-        details_frame = LabelFrame(root, text='Doujin Data', padx=10, pady=10)
+
+        # description frame 
+        details_frame = LabelFrame(self.root, text='Doujin Data', padx=10, pady=10)
         details_frame.grid(row=1, column=0, padx=10, pady=10, sticky="NESW")
 
         #  Sauce 
@@ -201,14 +113,126 @@ while (retry):
         tags_label.grid(row=5, column=0, sticky="W")
         
         print("Ui Started ...")
-        root.mainloop()
-        print("Dying ...")
+
+    def api_call(self):
+        print('System call : API')
+        sauce = sauce_entry.get()
+        hentai_exists = Hentai.exists(sauce)
+        try:
+            if hentai_exists :
+                dou = Hentai(sauce)
+                print(sauce)
+                print(dou)
+                return dou
+            else:
+                sauce_stat.set('Bad sauce ')
+        except TypeError as e : 
+            print(e)
+            sauce_stat.set('Temporary error ... Try again.')
+
+    def download_dou_callback(self):
+        def download_pages (): 
+            print('🧪 System call : Swallow initiated   ')
+            dou = api_call()
+            download_dir = './hentai'
+            os.mkdir(download_dir + f'/{dou.title(Format.Pretty)}')
+            images = dou.image_urls
+            counter = 0
+            for image in images : 
+                im = Image.open(requests.get(image, stream=True).raw) 
+                im.save(f"{download_dir}/{dou.title(Format.Pretty)}/{counter}.png")
+                print('drip')
+                counter = counter + 1
+        # threading.Thread(target=download_pages).start()
+        # download_dou.config(text="Downloading ... i hope ")
+        # print('started dat in another thred')
+    
+    def sauce_poured (self):
+        print('🧪 System call : Sauce Poured  ')
+        hope = True
+        while hope : 
+            try:
+                dou = api_call()
+                print(dou.image_urls)
+                update_cover(dou)
+                update_desc(dou)
+                update_button(dou)
+                sauce_stat.set('Saucing ')
+                hope = False
+            except TypeError as e :
+                print('mini stroke ',e)
+
+    def update_cover(self,dou):
+        print('🧪 System call : Update cover ')
+        basewidth = 470
+        im = Image.open(requests.get(dou.thumbnail, stream=True).raw)
+        wpercent = (basewidth/float(im.size[0]))
+        hsize = int((float(im.size[1])*float(wpercent)))
+        im = im.resize((basewidth,hsize), Image.ANTIALIAS)
+        im.save('cover.png')
+        print(' System notice : Cover downloaded ')
+        new_cover_image = PhotoImage(file='cover.png')
+        cover.config(image=new_cover_image)
+        cover.image = new_cover_image
+        print(' System notice : Cover Changed ')
+        sauce_stat.set('Sauce poured')
+
+    def update_button(self,dou):
+        print('System call : Update button ')
+        sauce_frame.config(bg='whitesmoke')
+        sauce_entry.config(bg='honeydew')
+        sauceify.config(bg='azure')
         
-        retry = False
-    # except TypeError as e:
-    #     print('Having an aneurism')
-    #     print(e)
-    except requests.exceptions.ConnectionError as e:
-        print('Having an Aneurism but Publicly.')
-        print(e)
+    def update_desc(self,dou):
+        print('System call : Update description ')
+        sauce_id.set(dou.id)
+        title.set(dou.title(format=Format.Pretty))
+        title_jp.set(dou.title(format=Format.Japanese))
+        title_en.set(dou.title(format=Format.English))
+        pages.set(dou.num_pages)
+        tag_names = 'Tags : '
+
+        for tag in dou.tag:
+            tag_names = tag_names + tag.name + ' | '
+            print(tag.name)
+        tags.set(tag_names)
+        print(dou.json)
+        print(dou.title(format=Format.Pretty))
+
+    def on_enter(self,e):
+        sauce_poured()
+
+    def start_mainloop(self):
+        self.root.mainloop()
+    
+    def check_netbeat(self):
+        hb = True   
+        while hb:
+            try:
+                hentai_sane = Hentai.exists(177013)
+                print(f'Hentai Heartbeat : {hentai_sane}')
+                return True
+            except TypeError as e:
+                print('Flat line : ',e)
+                return False
+            except requests.exceptions.ConnectionError:
+                return False
+        
+    def initialize_TPE(self):
+        with concurrent.futures.ThreadPoolExecutor() as self.executor:
+            print('starting a new thread to check for a netbeat')
+            f1  = self.executor.submit(self.check_netbeat())
+            print('done')
+    def add_new_thread(self,func):
+        print(f"Adding {func} to the Executor")
+        f = self.executor.submit(func)
+        return f
+
+
+nat = natto()
+
+
+
+
+
 
