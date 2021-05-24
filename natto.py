@@ -18,28 +18,28 @@ print('\n| ---- [ OK ] Imports \n')
 class natto():
     def __init__(self):
         print('\n| ---- [ OK ] Class inititation \n')
-        self.initialize_TPE()
-        self.add_new_thread(self.check_netbeat)
+        # self.initialize_TPE()
+        # self.add_new_thread(self.check_netbeat)
         self.start_ui()
 
     def start_ui(self):
         self.app_init()
         print('\n| ---- [ OK ] Ui Started \n')
+        self.add_ui_elements()
         self.start_mainloop()
-
-
 
     def app_init(self):
         self.root = Tk()
-        app_width = 820
-        app_height = 740
+        self.app_width = 820
+        self.app_height = 740
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        x = (screen_width / 2) - (app_width/2)
-        y = (screen_height / 2) - (app_height/2)
+        x = (screen_width / 2) - (self.app_width/2)
+        y = (screen_height / 2) - (self.app_height/2)
         # window size and positioning
-        self.root.geometry(f'{app_width}x{app_height}+{int(x/2)}+{int(y/2)}')
+        self.root.geometry(f'{self.app_width}x{self.app_height}+{int(x/2)}+{int(y/2)}')
         self.root.title('Natto | Stay Degenerate ')
+        self.check_cwd()
 
     def check_cwd(self):
         # Check current filesys directory 
@@ -52,30 +52,36 @@ class natto():
         else : 
             print("Hentai folder exists , All good .")
         print('\n| ---- [ OK ] Filesystem \n')
+        return True
+
     def add_ui_elements(self):
         # cover_image = PhotoImage(file='def.png')
-        cover = Label(self.root, text="Cover image here")
-        cover_pos_x = (app_width/4)
-        cover.place(x=cover_pos_x-50, y=0, relwidth=1, relheight=1)
+        self.cover = Label(self.root, text=" --- Cover image --- ")
+        cover_pos_x = (self.app_width/4)
+        self.cover.place(x=cover_pos_x-50, y=0, relwidth=1, relheight=1)
         
-        sauce_frame = LabelFrame(self.root, text='Sauwuce', padx=10, pady=10)
-        sauce_frame.grid(row=0, column=0, padx=10, pady=10, sticky="NSEW")
-        sauce_entry = Entry(sauce_frame, width=25)
-        sauceify = Button(sauce_frame, text="Natto !", command=sauce_poured)
-        sauce_entry.bind('<KeyPress-Return>',on_enter)
+        self.sauce_frame = LabelFrame(self.root, text='Sauce.', padx=10, pady=10)
+        self.sauce_frame.grid(row=0, column=0, padx=10, pady=10, sticky="NSEW")
+        self.sauce_entry = Entry(self.sauce_frame, width=25)
+        self.sauce_entry.grid(row=0, column=0, sticky="W")
+        self.sauce_entry.bind('<KeyPress-Return>',self.on_enter)
+        self.sauce_search_button = Button(self.sauce_frame, text="Search !", command=self.sauce_poured)
+        self.sauce_search_button.grid(row=0, column=1, sticky="E", padx=5, pady=5)
         
-        sauce_stat =  StringVar()
-        sauce_stat.set('Type a 5 or 6 digit sauce and Natto')
-        sauce_stat_label = Label(sauce_frame, textvar=sauce_stat,wraplength=250, justify="center")
-        sauce_stat_label.grid(row=1, column=0, sticky="W")
+        self.sauce_stat =  StringVar()
+        self.sauce_stat.set('Type Sauce and Search.')
+        self.sauce_stat_label = Label(self.sauce_frame, textvar=self.sauce_stat,wraplength=250, justify="center")
+        self.sauce_stat_label.grid(row=1, column=0, sticky="W")
         
-        sauce_entry.grid(row=0, column=0, sticky="W")
-        sauceify.grid(row=0, column=1, sticky="E", padx=5, pady=5)
-        
-        download_frame = LabelFrame(self.root, text='Dload', padx=10, pady=10)
-        download_frame.grid(row=2, column=0, padx=10, pady=10, sticky="NSEW")
-        download_dou = Button(download_frame, text="Swallow !", command=download_dou_callback)
-        download_dou.grid(row=0,column=0)
+        self.download_frame = LabelFrame(self.root, text='', padx=10, pady=10)
+        self.download_frame.grid(row=2, column=0, padx=10, pady=10, sticky="NSEW")
+        self.download_button = Button(self.download_frame, text="Download", command=self.download_button_callback)
+        self.download_button.grid(row=0,column=0,sticky="NSEW")
+        self.download_status = StringVar()
+        self.download_status.set('-------------------')
+        self.download_status_label = Label(self.download_frame, textvar=self.download_status)
+        self.download_status_label.grid(row=1,column=0,sticky='W')
+
 
         # description frame 
         details_frame = LabelFrame(self.root, text='Doujin Data', padx=10, pady=10)
@@ -114,9 +120,9 @@ class natto():
         
         print("Ui Started ...")
 
-    def api_call(self):
-        print('System call : API')
-        sauce = sauce_entry.get()
+    def get_doujin_data(self):
+        
+        sauce = self.sauce_entry.get()
         hentai_exists = Hentai.exists(sauce)
         try:
             if hentai_exists :
@@ -125,15 +131,15 @@ class natto():
                 print(dou)
                 return dou
             else:
-                sauce_stat.set('Bad sauce ')
+                self.sauce_stat.set('Bad sauce ')
         except TypeError as e : 
             print(e)
-            sauce_stat.set('Temporary error ... Try again.')
+            self.sauce_stat.set('Temporary error ... Try again.')
 
-    def download_dou_callback(self):
-        def download_pages (): 
-            print('🧪 System call : Swallow initiated   ')
-            dou = api_call()
+    def download_button_callback(self):
+        def download_pages (self): 
+            print('| ---- [ JOB ] Download requested ')
+            dou = self.get_doujin_data()
             download_dir = './hentai'
             os.mkdir(download_dir + f'/{dou.title(Format.Pretty)}')
             images = dou.image_urls
@@ -144,7 +150,7 @@ class natto():
                 print('drip')
                 counter = counter + 1
         # threading.Thread(target=download_pages).start()
-        # download_dou.config(text="Downloading ... i hope ")
+        # download_button.config(text="Downloading ... i hope ")
         # print('started dat in another thred')
     
     def sauce_poured (self):
@@ -152,12 +158,12 @@ class natto():
         hope = True
         while hope : 
             try:
-                dou = api_call()
+                dou = self.get_doujin_data()
                 print(dou.image_urls)
-                update_cover(dou)
-                update_desc(dou)
-                update_button(dou)
-                sauce_stat.set('Saucing ')
+                self.update_cover(dou)
+                self.update_desc(dou)
+                self.update_button(dou)
+                self.sauce_stat.set('Saucing ')
                 hope = False
             except TypeError as e :
                 print('mini stroke ',e)
@@ -172,16 +178,16 @@ class natto():
         im.save('cover.png')
         print(' System notice : Cover downloaded ')
         new_cover_image = PhotoImage(file='cover.png')
-        cover.config(image=new_cover_image)
-        cover.image = new_cover_image
+        self.cover.config(image=new_cover_image)
+        self.cover.image = new_cover_image
         print(' System notice : Cover Changed ')
-        sauce_stat.set('Sauce poured')
+        self.sauce_stat.set('Sauce poured')
 
     def update_button(self,dou):
         print('System call : Update button ')
-        sauce_frame.config(bg='whitesmoke')
-        sauce_entry.config(bg='honeydew')
-        sauceify.config(bg='azure')
+        self.self.sauce_frame.config(bg='whitesmoke')
+        self.sauce_entry.config(bg='honeydew')
+        self.sauce_search_button.config(bg='azure')
         
     def update_desc(self,dou):
         print('System call : Update description ')
@@ -200,7 +206,7 @@ class natto():
         print(dou.title(format=Format.Pretty))
 
     def on_enter(self,e):
-        sauce_poured()
+        self.sauce_poured()
 
     def start_mainloop(self):
         self.root.mainloop()
@@ -218,15 +224,15 @@ class natto():
             except requests.exceptions.ConnectionError:
                 return False
         
-    def initialize_TPE(self):
-        with concurrent.futures.ThreadPoolExecutor() as self.executor:
-            print('starting a new thread to check for a netbeat')
-            f1  = self.executor.submit(self.check_netbeat())
-            print('done')
-    def add_new_thread(self,func):
-        print(f"Adding {func} to the Executor")
-        f = self.executor.submit(func)
-        return f
+    # def initialize_TPE(self):
+    #     with concurrent.futures.ThreadPoolExecutor() as self.executor:
+    #         print('starting a new thread to check for a netbeat')
+    #         f1  = self.executor.submit(self.check_netbeat())
+    #         print('done')
+    # def add_new_thread(self,func):
+    #     print(f"Adding {func} to the Executor")
+    #     f = self.executor.submit(func)
+    #     return f
 
 
 nat = natto()
