@@ -1,11 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 block_cipher = None
 
 
 a = Analysis(['natto.py'],
-             pathex=['/home/runner/Natto'],
+             pathex=['C:\\Users\\25198\\Desktop\\Nitai'],
              binaries=[],
              datas=[],
              hiddenimports=[],

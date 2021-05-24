@@ -11,9 +11,13 @@ import threading
 
 
 
-# continiously try as long as retry is not set to false
-retry = True
-while (retry):
+
+exit_com = True
+while (exit_com):
+        
+        
+        
+        
     try:
         # Hanity check
         sample_cum = Hentai(177013)
@@ -69,7 +73,7 @@ while (retry):
                 for image in images : 
                     im = Image.open(requests.get(image, stream=True).raw) 
                     im.save(f"{download_dir}/{dou.title(Format.Pretty)}/{counter}.png")
-                    print(f'downloaded page {counter}')
+                    print('drip')
                     counter = counter + 1
             threading.Thread(target=download_pages).start()
             download_dou.config(text="Downloading ... i hope ")
@@ -79,15 +83,16 @@ while (retry):
             print('🧪 System call : Sauce Poured  ')
             hope = True
             while hope : 
-
-                  dou = api_call()
-                  print(dou.image_urls)
-                  update_cover(dou)
-                  update_desc(dou)
-                  update_button(dou)
-                  sauce_stat.set('Saucing ')
-                  hope = False
-
+                try:
+                    dou = api_call()
+                    print(dou.image_urls)
+                    update_cover(dou)
+                    update_desc(dou)
+                    update_button(dou)
+                    sauce_stat.set('Saucing ')
+                    hope = False
+                except TypeError as e :
+                    print('mini stroke ',e)
 
         def update_cover(dou):
             print('🧪 System call : Update cover ')
@@ -191,11 +196,11 @@ while (retry):
         root.mainloop()
         print("Dying ...")
         
-        retry = False
-    # except TypeError as e:
-    #     print('Having an aneurism')
-    #     print(e)
-    # except requests.exceptions.ConnectionError as e:
-    #     print('Having an Aneurism but Publicly.')
-    #     print(e)
+        exit_com = False
+    except TypeError as e:
+        print('Having an aneurism')
+        print(e)
+    except requests.exceptions.ConnectionError as e:
+        print('Having an Aneurism but Publicly.')
+        print(e)
 
