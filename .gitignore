@@ -2,3 +2,7 @@ __pycache__
 build
 dist
 hentai
+*.jpg
+*.png
+*.png
+cover.png

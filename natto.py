@@ -1,9 +1,11 @@
+
+
 import os
 import requests
 import threading
 import socket
+import time
 
-import concurrent.futures
 
 from tkinter import *
 from tkinter import ttk
@@ -18,8 +20,6 @@ print('\n| ---- [ OK ] Imports \n')
 class natto():
     def __init__(self):
         print('\n| ---- [ OK ] Class inititation \n')
-        # self.initialize_TPE()
-        # self.add_new_thread(self.check_netbeat)
         self.start_ui()
 
     def start_ui(self):
@@ -88,86 +88,110 @@ class natto():
         details_frame.grid(row=1, column=0, padx=10, pady=10, sticky="NESW")
 
         #  Sauce 
-        sauce_id = StringVar()
-        sauce_id.set('000000')
-        sauce_label = Label(details_frame, textvar=sauce_id,wraplength=250, justify="left")
-        sauce_label.grid(row=0, column=0, sticky="W")
+        self.sauce_id = StringVar()
+        self.sauce_id.set('#177013')
+        self.sauce_label = Label(details_frame, textvar=self.sauce_id,wraplength=250, justify="left")
+        self.sauce_label.grid(row=0, column=0, sticky="W")
         # Pretty title
-        title = StringVar()
-        title.set('Title')
-        title_label = Label(details_frame, textvar=title,wraplength=250, justify="left")
-        title_label.grid(row=1, column=0, sticky="W")
+        self.title = StringVar()
+        self.title.set('Doujin Title : ')
+        self.title_label = Label(details_frame, textvar=self.title,wraplength=250, justify="left")
+        self.title_label.grid(row=1, column=0, sticky="W")
         # Japaneese title
-        title_jp = StringVar()
-        title_jp.set('Title')
-        title_jp_label = Label(details_frame, textvar=title_jp,wraplength=250, justify="left")
-        title_jp_label.grid(row=2, column=0, sticky="W")
+        self.title_jp = StringVar()
+        self.title_jp.set('Japaneese Title : ')
+        self.title_jp_label = Label(details_frame, textvar=self.title_jp,wraplength=250, justify="left")
+        self.title_jp_label.grid(row=2, column=0, sticky="W")
         # English title
-        title_en = StringVar()
-        title_en.set('Title')
-        title_en_label = Label(details_frame, textvar=title_en,wraplength=250, justify="left")
-        title_en_label.grid(row=3, column=0, sticky="W")
+        self.title_en = StringVar()
+        self.title_en.set('English Title : ')
+        self.title_en_label = Label(details_frame, textvar=self.title_en,wraplength=250, justify="left")
+        self.title_en_label.grid(row=3, column=0, sticky="W")
         #  Number of pages 
-        pages = StringVar()
-        pages.set('Pages')
-        pages_label = Label(details_frame, textvar=pages,wraplength=250, justify="left")
-        pages_label.grid(row=4, column=0, sticky="W")
+        self.pages = StringVar()
+        self.pages.set('Number of Pages : ')
+        self.pages_label = Label(details_frame, textvar=self.pages,wraplength=250, justify="left")
+        self.pages_label.grid(row=4, column=0, sticky="W")
         # Tags
-        tags = StringVar()
-        tags.set('Tags')
-        tags_label = Label(details_frame, textvar=tags,wraplength=250, justify="left")
-        tags_label.grid(row=5, column=0, sticky="W")
+        self.tags = StringVar()
+        self.tags.set('Tags : ')
+        self.tags_label = Label(details_frame, textvar=self.tags,wraplength=250, justify="left")
+        self.tags_label.grid(row=5, column=0, sticky="W")
         
         print("Ui Started ...")
-
+    
     def get_doujin_data(self):
-        
+        print('| ---- [Syscall] Get doujin data.')
+        self.current_doujin = None
         sauce = self.sauce_entry.get()
-        hentai_exists = Hentai.exists(sauce)
-        try:
-            if hentai_exists :
-                dou = Hentai(sauce)
-                print(sauce)
-                print(dou)
-                return dou
-            else:
-                self.sauce_stat.set('Bad sauce ')
-        except TypeError as e : 
-            print(e)
-            self.sauce_stat.set('Temporary error ... Try again.')
+        if sauce == '':
+            self.sauce_stat.set('Gib sauce.')
+        else :
+            
+            hentai_exists = Hentai.exists(sauce)
+            hope = True
+            while hope:
+                try:
+                    if hentai_exists :
+                        dou = Hentai(sauce)
+                        print(sauce)
+                        print(dou)
+                        hope = False
+                        self.current_doujin = dou
+                        return dou
+                    else:
+                        self.sauce_stat.set('Bad sauce ')
+                        return False
+                except:
+                    self.sauce_stat.set('Temporary error ... Trying again.')
+                    return False
+        return False
 
     def download_button_callback(self):
-        def download_pages (self): 
-            print('| ---- [ JOB ] Download requested ')
-            dou = self.get_doujin_data()
-            download_dir = './hentai'
-            os.mkdir(download_dir + f'/{dou.title(Format.Pretty)}')
-            images = dou.image_urls
-            counter = 0
-            for image in images : 
-                im = Image.open(requests.get(image, stream=True).raw) 
-                im.save(f"{download_dir}/{dou.title(Format.Pretty)}/{counter}.png")
-                print('drip')
-                counter = counter + 1
-        # threading.Thread(target=download_pages).start()
-        # download_button.config(text="Downloading ... i hope ")
+        dou = self.current_doujin
+        print('| ---- [ JOB ] Download requested ')
+        def download_pages ():
+            hope  = True
+            while hope:
+                print('Retrying ')
+                try:
+                    dou.download(Path.cwd())
+                    hope = False
+                except Exception as e : 
+                    print('Internal chaos ',e)
+
+        print('| ---- [ JOB ] Download done ')
+
+        t1 = threading.Thread(target=download_pages)
+        t1.start()
+
+
+
+        self.download_button.config(text="Downloading ... ? ")
+
         # print('started dat in another thred')
     
     def sauce_poured (self):
-        print('🧪 System call : Sauce Poured  ')
-        hope = True
-        while hope : 
+        print('🧪 System call : Sauce Click  ')
+
+        for trial in range(10): 
             try:
                 dou = self.get_doujin_data()
-                print(dou.image_urls)
-                self.update_cover(dou)
-                self.update_desc(dou)
-                self.update_button(dou)
-                self.sauce_stat.set('Saucing ')
-                hope = False
-            except TypeError as e :
-                print('mini stroke ',e)
+                if dou != False: 
+                    print(dou.image_urls)
+                    self.update_cover(dou)
+                    self.update_desc(dou)
+                    self.update_button(dou)
+                    self.sauce_stat.set('Fetched data ')
+                    break
 
+            except TypeError as e :
+                print(f'Temporary error ... Retrying {trial+1}/10',e)
+                self.sauce_stat.set(f'Network error ... ')
+                
+                # with concurrent.futures.ThreadPoolExecutor() as self.executor:
+                #     self.executor.submit(update_sauce_stat)
+    
     def update_cover(self,dou):
         print('🧪 System call : Update cover ')
         basewidth = 470
@@ -185,23 +209,23 @@ class natto():
 
     def update_button(self,dou):
         print('System call : Update button ')
-        self.self.sauce_frame.config(bg='whitesmoke')
+        self.sauce_frame.config(bg='whitesmoke')
         self.sauce_entry.config(bg='honeydew')
         self.sauce_search_button.config(bg='azure')
-        
+    
     def update_desc(self,dou):
         print('System call : Update description ')
-        sauce_id.set(dou.id)
-        title.set(dou.title(format=Format.Pretty))
-        title_jp.set(dou.title(format=Format.Japanese))
-        title_en.set(dou.title(format=Format.English))
-        pages.set(dou.num_pages)
+        self.sauce_id.set(dou.id)
+        self.title.set(dou.title(format=Format.Pretty))
+        self.title_jp.set(dou.title(format=Format.Japanese))
+        self.title_en.set(dou.title(format=Format.English))
+        self.pages.set(dou.num_pages)
         tag_names = 'Tags : '
 
         for tag in dou.tag:
             tag_names = tag_names + tag.name + ' | '
             print(tag.name)
-        tags.set(tag_names)
+        self.tags.set(tag_names)
         print(dou.json)
         print(dou.title(format=Format.Pretty))
 
@@ -209,30 +233,18 @@ class natto():
         self.sauce_poured()
 
     def start_mainloop(self):
-        self.root.mainloop()
-    
-    def check_netbeat(self):
-        hb = True   
-        while hb:
-            try:
-                hentai_sane = Hentai.exists(177013)
-                print(f'Hentai Heartbeat : {hentai_sane}')
-                return True
-            except TypeError as e:
-                print('Flat line : ',e)
-                return False
-            except requests.exceptions.ConnectionError:
-                return False
+        def test_sleep():
+            for _ in range(5):
+                print('Starting sleep')
+                time.sleep(1)
+                print('Stopping sleep')
         
-    # def initialize_TPE(self):
-    #     with concurrent.futures.ThreadPoolExecutor() as self.executor:
-    #         print('starting a new thread to check for a netbeat')
-    #         f1  = self.executor.submit(self.check_netbeat())
-    #         print('done')
-    # def add_new_thread(self,func):
-    #     print(f"Adding {func} to the Executor")
-    #     f = self.executor.submit(func)
-    #     return f
+        # tmain = threading.Thread(target=test_sleep)
+        # print('threaded sleep')
+        # tmain.start()
+        self.root.mainloop()
+
+
 
 
 nat = natto()
