@@ -1,11 +1,12 @@
+# ... and he said " let there be time " python line 2:12
+import time
 
-
+import logging
 import os
 import requests
 import threading
 import socket
-import time
-
+import sys
 
 from tkinter import *
 from tkinter import ttk
@@ -14,18 +15,42 @@ from PIL import Image
 from pathlib import Path
 from hentai import Hentai,Format
 
-print('\n\n\n\n\n\n\n\n\n')
-print('\n| ---- [ OK ] Imports \n')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [ %(threadName)s ] [ %(levelname)s ] %(message)s",
+    handlers=[
+        logging.FileHandler("debug.log",mode='w',encoding=None,delay=False),
+        logging.StreamHandler()
+    ]
+)
 
+print('\n\n\n\n\n\n\n\n\n')
+logging.info('Imports done ')
 class natto():
     def __init__(self):
-        print('\n| ---- [ OK ] Class inititation \n')
         self.start_ui()
+        logging.info('UI Shutdown...')
+        
+    def sanitize_foldername(self, folder_dirty):
+        
+        folder_clean = folder_dirty.replace("?","")
+        folder_clean = folder_clean.replace(">","")
+        folder_clean = folder_clean.replace("<","")
+        folder_clean = folder_clean.replace("\\","")
+        folder_clean = folder_clean.replace("/","")
+        folder_clean = folder_clean.replace("*","")
+        folder_clean = folder_clean.replace("|","")
+        folder_clean = folder_clean.replace(":","")
+        folder_clean = folder_clean.replace("\"","")
 
+        print(folder_dirty)
+        print(folder_clean)
+        return folder_clean
+    
     def start_ui(self):
         self.app_init()
-        print('\n| ---- [ OK ] Ui Started \n')
         self.add_ui_elements()
+        logging.info('UI Started.')
         self.start_mainloop()
 
     def app_init(self):
@@ -44,14 +69,15 @@ class natto():
     def check_cwd(self):
         # Check current filesys directory 
         wd = Path.cwd()
-        print("Working directory : ",Path.cwd())
+        logging.info('Working dir : %s',wd)
         hentai_folder_exists = Path.exists(Path.joinpath(wd,'./hentai'))
+        logging.info('Hentai folder : %s',hentai_folder_exists)
         if hentai_folder_exists == False:
             print("Can't find the Hentai folder near me \n  Creating one at the current working directory ...")
             os.mkdir('hentai')
         else : 
-            print("Hentai folder exists , All good .")
-        print('\n| ---- [ OK ] Filesystem \n')
+            logging.info("Hentai folder exists , All good .")
+
         return True
 
     def add_ui_elements(self):
@@ -118,7 +144,7 @@ class natto():
         self.tags_label = Label(details_frame, textvar=self.tags,wraplength=250, justify="left")
         self.tags_label.grid(row=5, column=0, sticky="W")
         
-        print("Ui Started ...")
+
     
     def get_doujin_data(self):
         print('| ---- [Syscall] Get doujin data.')
@@ -246,8 +272,8 @@ class natto():
 
 
 
-
-nat = natto()
+if __name__ == '__main__' :
+    nat = natto()
 
 
 
