@@ -8,15 +8,15 @@ import threading
 import socket
 import sys
 
-from tkinter import *
-from tkinter import ttk
+import mttkinter as tkinter
+# from tkinter import ttk
 
 from PIL import Image
 from pathlib import Path
 from hentai import Hentai,Format
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s [ %(threadName)s ] [ %(levelname)s ] %(message)s",
     handlers=[
         logging.FileHandler("debug.log",mode='w',encoding=None,delay=False),
@@ -28,8 +28,11 @@ print('\n\n\n\n\n\n\n\n\n')
 logging.info('Imports done ')
 class natto():
     def __init__(self):
-        self.start_ui()
-        logging.info('UI Shutdown...')
+        # self.start_ui()
+        # logging.info('UI Shutdown...')
+        # self.current_doujin = ''
+        pass
+
         
     def sanitize_foldername(self, folder_dirty):
         
@@ -54,7 +57,7 @@ class natto():
         self.start_mainloop()
 
     def app_init(self):
-        self.root = Tk()
+        self.root = tkinter.Tk()
         self.app_width = 820
         self.app_height = 740
         screen_width = self.root.winfo_screenwidth()
@@ -143,89 +146,123 @@ class natto():
         self.tags.set('Tags : ')
         self.tags_label = Label(details_frame, textvar=self.tags,wraplength=250, justify="left")
         self.tags_label.grid(row=5, column=0, sticky="W")
-        
-
     
     def get_doujin_data(self):
-        print('| ---- [Syscall] Get doujin data.')
-        self.current_doujin = None
+        logging.info('Get doujin data.')
+        
         sauce = self.sauce_entry.get()
         if sauce == '':
             self.sauce_stat.set('Gib sauce.')
         else :
-            
-            hentai_exists = Hentai.exists(sauce)
-            hope = True
-            while hope:
+            def get_hentai_data (): 
+                logging.info('Fetching hentai data ')
                 try:
-                    if hentai_exists :
-                        dou = Hentai(sauce)
-                        print(sauce)
-                        print(dou)
-                        hope = False
-                        self.current_doujin = dou
-                        return dou
-                    else:
-                        self.sauce_stat.set('Bad sauce ')
-                        return False
-                except:
-                    self.sauce_stat.set('Temporary error ... Trying again.')
-                    return False
+                    hentai_exists = Hentai.exists(sauce)
+                    logging.info('Hentai Exists : %s ',hentai_exists)
+                except TypeError as e :
+                    logging.error('Error : %s',e)
+                
+                hope = True
+                while hope:
+                    try:
+                        if hentai_exists :
+                            dou = Hentai(sauce)
+                            logging.debug(sauce)
+                            logging.debug(dou)
+                            hope = False
+                            self.current_doujin = dou
+                            logging.debug(self.current_doujin)
+                            logging.debug(dou)
+                            return dou
+                        else:
+                            self.sauce_stat.set('Bad sauce ')
+                            return 'Bad_sauce'
+                    except:
+                        self.sauce_stat.set('Temporary error ... Trying again.')
+                        return "Error"
+            
+            self.t3 = threading.Thread(target=get_hentai_data,daemon=True)
+            logging.info('Starting a thread to fetch data ')
+            self.sauce_stat.set('On it ...  ')
+            self.t3.start()
+        
         return False
 
     def download_button_callback(self):
         dou = self.current_doujin
-        print('| ---- [ JOB ] Download requested ')
         def download_pages ():
             hope  = True
             while hope:
                 print('Retrying ')
                 try:
                     dou.download(Path.cwd())
+                    logging.info('Downloading ... ')
                     hope = False
                 except Exception as e : 
-                    print('Internal chaos ',e)
+                    logging.warning('Internal chaos %s',e)
 
         print('| ---- [ JOB ] Download done ')
 
-        t1 = threading.Thread(target=download_pages)
+        t1 = threading.Thread(target=download_pages,daemon=True)
         t1.start()
+        logging.info('Download Thread started')
 
 
-
-        self.download_button.config(text="Downloading ... ? ")
+        self.download_button.config(text="Downloading ...  ")
 
         # print('started dat in another thred')
     
     def sauce_poured (self):
-        print('🧪 System call : Sauce Click  ')
-
-        for trial in range(10): 
-            try:
-                dou = self.get_doujin_data()
-                if dou != False: 
-                    print(dou.image_urls)
-                    self.update_cover(dou)
-                    self.update_desc(dou)
-                    self.update_button(dou)
-                    self.sauce_stat.set('Fetched data ')
-                    break
-
-            except TypeError as e :
-                print(f'Temporary error ... Retrying {trial+1}/10',e)
-                self.sauce_stat.set(f'Network error ... ')
+        logging.info(' System call : Sauce Click  ')
+        dou = self.get_doujin_data()
+        hope = True 
+        while hope :
+            logging.info('Child is alive %s',self.t3.is_alive())
+            time.sleep(2)
+            if self.t3.is_alive() == False : 
+                logging.info('Child is no longer alive ')
+                hope = False
+                self.sauce_stat.set('Done ... ')
+                logging.info('Data : %s',self.current_doujin)
                 
-                # with concurrent.futures.ThreadPoolExecutor() as self.executor:
-                #     self.executor.submit(update_sauce_stat)
+                
+                self.update_cover(self.current_doujin)
+                self.update_desc(self.current_doujin)
+                self.update_button(self.current_doujin)
+
+
+
+
+
+        #     while self.current_doujin : 
+        #         douj = self.current_doujin
+        #         time.sleep(1)
+        #         logging.info('Doujin : %s',dou)
+        #     if dou != False: 
+        #         # print(dou.image_urls)
+                
+        #         self.sauce_stat.set('Fetched data ')
+
+        # except TypeError as e :
+        #     print(f'Temporary error ... Retrying',e)
+        #     self.sauce_stat.set(f'Network error ... ')
+
     
     def update_cover(self,dou):
-        print('🧪 System call : Update cover ')
+        logging.info('System call : Update cover ')
         basewidth = 470
-        im = Image.open(requests.get(dou.thumbnail, stream=True).raw)
-        wpercent = (basewidth/float(im.size[0]))
-        hsize = int((float(im.size[1])*float(wpercent)))
-        im = im.resize((basewidth,hsize), Image.ANTIALIAS)
-        im.save('cover.png')
+        def get_cover():
+            logging.info('Downloading Cover image  ')
+            im = Image.open(requests.get(dou.thumbnail, stream=True).raw)
+            wpercent = (basewidth/float(im.size[0]))
+            hsize = int((float(im.size[1])*float(wpercent)))
+            im = im.resize((basewidth,hsize), Image.ANTIALIAS)
+            logging.info('Saving Cover image  ')
+            im.save('cover.png')
+        t2 = threading.Thread(target=get_cover,daemon=True)
+        t2.start()
+        logging.info('Started cover download thread ')
+        t2.join()
         print(' System notice : Cover downloaded ')
         new_cover_image = PhotoImage(file='cover.png')
         self.cover.config(image=new_cover_image)
@@ -259,22 +296,24 @@ class natto():
         self.sauce_poured()
 
     def start_mainloop(self):
-        def test_sleep():
-            for _ in range(5):
-                print('Starting sleep')
-                time.sleep(1)
-                print('Stopping sleep')
+
         
-        # tmain = threading.Thread(target=test_sleep)
-        # print('threaded sleep')
-        # tmain.start()
+        logging.info('Tk MainLoop Started ')
         self.root.mainloop()
+
+
+def test_sleep():
+    for _ in range(5):
+        print('Starting sleep')
+        time.sleep(1)
+        print('Stopping sleep')
 
 
 
 if __name__ == '__main__' :
     nat = natto()
-
+    t1 = threading.Thread(target=nat.start_ui)
+    t1.start()
 
 
 
