@@ -1,1 +1,87 @@
-2021-05-28 16:36:40,329 [ MainThread ] [ INFO ] Imports done 
+2021-05-30 19:04:17,516 [ MainThread ] [ INFO ] Imports done 
+2021-05-30 19:04:17,619 [ MainThread ] [ INFO ] Working dir : C:\Users\25198\Desktop\Natto
+2021-05-30 19:04:17,620 [ MainThread ] [ INFO ] Hentai folder : True
+2021-05-30 19:04:17,621 [ MainThread ] [ INFO ] Hentai folder exists , All good .
+2021-05-30 19:04:17,626 [ MainThread ] [ INFO ] UI Started.
+2021-05-30 19:04:17,627 [ MainThread ] [ INFO ] Tk MainLoop Started 
+2021-05-30 19:04:19,215 [ Thread-1 ] [ INFO ] Error downloading 1
+2021-05-30 19:04:19,216 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:20,217 [ Thread-1 ] [ INFO ] Downloaded 2
+2021-05-30 19:04:20,725 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:21,220 [ Thread-1 ] [ INFO ] Downloaded 4
+2021-05-30 19:04:21,220 [ Thread-1 ] [ INFO ] Error downloading 6
+2021-05-30 19:04:21,221 [ Thread-1 ] [ INFO ] Error downloading 7
+2021-05-30 19:04:22,223 [ Thread-1 ] [ INFO ] Downloaded 8
+2021-05-30 19:04:22,232 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:23,224 [ Thread-1 ] [ INFO ] Downloaded 10
+2021-05-30 19:04:23,225 [ Thread-1 ] [ INFO ] Error downloading 12
+2021-05-30 19:04:23,744 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:24,228 [ Thread-1 ] [ INFO ] Downloaded 13
+2021-05-30 19:04:25,229 [ Thread-1 ] [ INFO ] Downloaded 15
+2021-05-30 19:04:25,252 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:26,230 [ Thread-1 ] [ INFO ] Downloaded 17
+2021-05-30 19:04:26,761 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:27,232 [ Thread-1 ] [ INFO ] Downloaded 19
+2021-05-30 19:04:28,234 [ Thread-1 ] [ INFO ] Downloaded 21
+2021-05-30 19:04:28,235 [ Thread-1 ] [ INFO ] Error downloading 23
+2021-05-30 19:04:28,237 [ Thread-1 ] [ INFO ] Error downloading 24
+2021-05-30 19:04:28,239 [ Thread-1 ] [ INFO ] Error downloading 25
+2021-05-30 19:04:28,240 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:28,241 [ Thread-1 ] [ INFO ] Error downloading 27
+2021-05-30 19:04:28,243 [ Thread-1 ] [ INFO ] Error downloading 1
+2021-05-30 19:04:28,278 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:29,245 [ Thread-1 ] [ INFO ] Downloaded 3
+2021-05-30 19:04:29,246 [ Thread-1 ] [ INFO ] Error downloading 6
+2021-05-30 19:04:29,787 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:30,247 [ Thread-1 ] [ INFO ] Downloaded 7
+2021-05-30 19:04:30,249 [ Thread-1 ] [ INFO ] Error downloading 11
+2021-05-30 19:04:31,252 [ Thread-1 ] [ INFO ] Downloaded 12
+2021-05-30 19:04:31,253 [ Thread-1 ] [ INFO ] Error downloading 16
+2021-05-30 19:04:31,307 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:32,255 [ Thread-1 ] [ INFO ] Downloaded 18
+2021-05-30 19:04:32,818 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:33,257 [ Thread-1 ] [ INFO ] Downloaded 22
+2021-05-30 19:04:33,258 [ Thread-1 ] [ INFO ] Error downloading 24
+2021-05-30 19:04:34,259 [ Thread-1 ] [ INFO ] Downloaded 25
+2021-05-30 19:04:34,326 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:35,261 [ Thread-1 ] [ INFO ] Downloaded 27
+2021-05-30 19:04:35,834 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:36,264 [ Thread-1 ] [ INFO ] Downloaded 1
+2021-05-30 19:04:36,265 [ Thread-1 ] [ INFO ] Error downloading 6
+2021-05-30 19:04:36,268 [ Thread-1 ] [ INFO ] Error downloading 9
+2021-05-30 19:04:37,271 [ Thread-1 ] [ INFO ] Downloaded 11
+2021-05-30 19:04:37,340 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:38,273 [ Thread-1 ] [ INFO ] Downloaded 16
+2021-05-30 19:04:38,274 [ Thread-1 ] [ INFO ] Error downloading 23
+2021-05-30 19:04:38,276 [ Thread-1 ] [ INFO ] Error downloading 24
+2021-05-30 19:04:38,277 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:38,852 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:39,280 [ Thread-1 ] [ INFO ] Downloaded 5
+2021-05-30 19:04:40,281 [ Thread-1 ] [ INFO ] Downloaded 9
+2021-05-30 19:04:40,281 [ Thread-1 ] [ INFO ] Error downloading 20
+2021-05-30 19:04:40,282 [ Thread-1 ] [ INFO ] Error downloading 23
+2021-05-30 19:04:40,282 [ Thread-1 ] [ INFO ] Error downloading 24
+2021-05-30 19:04:40,283 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:40,358 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:41,285 [ Thread-1 ] [ INFO ] Downloaded 6
+2021-05-30 19:04:41,286 [ Thread-1 ] [ INFO ] Error downloading 20
+2021-05-30 19:04:41,287 [ Thread-1 ] [ INFO ] Error downloading 23
+2021-05-30 19:04:41,866 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:42,290 [ Thread-1 ] [ INFO ] Downloaded 24
+2021-05-30 19:04:42,291 [ Thread-1 ] [ INFO ] Error downloading 14
+2021-05-30 19:04:42,293 [ Thread-1 ] [ INFO ] Error downloading 20
+2021-05-30 19:04:43,295 [ Thread-1 ] [ INFO ] Downloaded 23
+2021-05-30 19:04:43,296 [ Thread-1 ] [ INFO ] Error downloading 14
+2021-05-30 19:04:43,374 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:44,299 [ Thread-1 ] [ INFO ] Downloaded 20
+2021-05-30 19:04:44,300 [ Thread-1 ] [ INFO ] Error downloading 14
+2021-05-30 19:04:44,302 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:44,304 [ Thread-1 ] [ INFO ] Error downloading 14
+2021-05-30 19:04:44,305 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:44,307 [ Thread-1 ] [ INFO ] Error downloading 14
+2021-05-30 19:04:44,308 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:44,882 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? True
+2021-05-30 19:04:45,311 [ Thread-1 ] [ INFO ] Downloaded 14
+2021-05-30 19:04:45,312 [ Thread-1 ] [ INFO ] Error downloading 26
+2021-05-30 19:04:46,314 [ Thread-1 ] [ INFO ] Downloaded 26
+2021-05-30 19:04:46,388 [ Thread-2 ] [ DEBUG ] Download Thread Ongoing? False

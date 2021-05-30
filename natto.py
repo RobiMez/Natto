@@ -7,9 +7,12 @@ import requests
 import threading
 import socket
 import sys
+from random import randint
 
-import mttkinter as tkinter
-# from tkinter import ttk
+
+
+from tkinter import *
+from tkinter import ttk
 
 from PIL import Image
 from pathlib import Path
@@ -28,12 +31,34 @@ print('\n\n\n\n\n\n\n\n\n')
 logging.info('Imports done ')
 class natto():
     def __init__(self):
-        # self.start_ui()
+        self.start_ui()
         # logging.info('UI Shutdown...')
         # self.current_doujin = ''
         pass
 
+    
+    def simulate_io(self,secs):
+        logging.info('Simulating IO operation , sleeping for %s second(s)',secs)
+        time.sleep(secs)
+        logging.info('Simulating IO operation Done sleeping for %s second(s)',secs)
+    
+    def simulate_io_realist(self):
+        def good_run():
+            # logging.info('Simulating Realistic IO operation Successful run ')
+            pass
+        def bad_run():
+            # logging.info('Simulating Realistic IO operation Exception')
+            raise ZeroDivisionError
+            
+        if randint(1,100) > 50 : 
+            good_run()
+            time.sleep(1)
+        else : 
+            bad_run()
+            time.sleep(1)
         
+    
+    
     def sanitize_foldername(self, folder_dirty):
         
         folder_clean = folder_dirty.replace("?","")
@@ -57,12 +82,12 @@ class natto():
         self.start_mainloop()
 
     def app_init(self):
-        self.root = tkinter.Tk()
+        self.root = Tk()
         self.app_width = 820
         self.app_height = 740
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        x = (screen_width / 2) - (self.app_width/2)
+        x = (screen_width / 2) - (self.app_width/2)+900
         y = (screen_height / 2) - (self.app_height/2)
         # window size and positioning
         self.root.geometry(f'{self.app_width}x{self.app_height}+{int(x/2)}+{int(y/2)}')
@@ -108,7 +133,7 @@ class natto():
         self.download_button.grid(row=0,column=0,sticky="NSEW")
         self.download_status = StringVar()
         self.download_status.set('-------------------')
-        self.download_status_label = Label(self.download_frame, textvar=self.download_status)
+        self.download_status_label = Label(self.download_frame, textvar=self.download_status,wraplength=210,)
         self.download_status_label.grid(row=1,column=0,sticky='W')
 
 
@@ -189,28 +214,53 @@ class natto():
         return False
 
     def download_button_callback(self):
-        dou = self.current_doujin
-        def download_pages ():
-            hope  = True
-            while hope:
-                print('Retrying ')
-                try:
-                    dou.download(Path.cwd())
-                    logging.info('Downloading ... ')
-                    hope = False
-                except Exception as e : 
-                    logging.warning('Internal chaos %s',e)
+        to_download_pages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+        downloaded_pages = []
+        
+        def downloading_status() : 
+            download_ongoing = True
+            while download_ongoing:
+                download_ongoing = t1.is_alive()
+                self.download_status.set(f'Downloaded pages : {downloaded_pages}\nPages to download : {to_download_pages}')
+                logging.debug('Download Thread Ongoing? %s',download_ongoing)
+                self.download_button.config(text="Downloading .  ")
+                time.sleep(0.5)
+                self.download_button.config(text="Downloading ..  ")
+                time.sleep(0.5)
+                self.download_button.config(text="Downloading ...  ")
+                time.sleep(0.5)
+            self.download_button.config(text="Downloaded !  ")
+        def threaded_download():
+            # TODO: Change simulation to actual io operation 
+            while len(to_download_pages) >= 1 : 
+                for i in to_download_pages:
+                    try: 
+                        self.simulate_io_realist()
+                        logging.info('Downloaded %s',i)
+                        downloaded_pages.append(i)
+                        to_download_pages.remove(i)
+                    except ZeroDivisionError:
+                        # self.download_status.set(f'Error ...')
+                        logging.info('Error downloading %s',i)
 
-        print('| ---- [ JOB ] Download done ')
+        # dou = self.current_doujin
+        # def download_pages ():
+        #     hope  = True
+        #     while hope:
+        #         print('Retrying ')
+        #         try:
+        #             dou.download(Path.cwd())
+        #             logging.info('Downloading ... ')
+        #             hope = False
+        #         except Exception as e : 
+        #             logging.warning('Internal chaos %s',e)
 
-        t1 = threading.Thread(target=download_pages,daemon=True)
+
+        t1 = threading.Thread(target=threaded_download,daemon=True)
+        t2 = threading.Thread(target=downloading_status,daemon=True)
         t1.start()
-        logging.info('Download Thread started')
+        t2.start()
 
-
-        self.download_button.config(text="Downloading ...  ")
-
-        # print('started dat in another thred')
     
     def sauce_poured (self):
         logging.info(' System call : Sauce Click  ')
@@ -232,20 +282,6 @@ class natto():
 
 
 
-
-
-        #     while self.current_doujin : 
-        #         douj = self.current_doujin
-        #         time.sleep(1)
-        #         logging.info('Doujin : %s',dou)
-        #     if dou != False: 
-        #         # print(dou.image_urls)
-                
-        #         self.sauce_stat.set('Fetched data ')
-
-        # except TypeError as e :
-        #     print(f'Temporary error ... Retrying',e)
-        #     self.sauce_stat.set(f'Network error ... ')
 
     
     def update_cover(self,dou):
@@ -312,8 +348,9 @@ def test_sleep():
 
 if __name__ == '__main__' :
     nat = natto()
-    t1 = threading.Thread(target=nat.start_ui)
-    t1.start()
+    # t1 = threading.Thread(target=nat.start_ui)
+    # t1.start()
+    # t1.join()
 
 
 

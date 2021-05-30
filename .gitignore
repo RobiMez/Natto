@@ -6,3 +6,5 @@ hentai
 *.png
 *.png
 cover.png
+*.log
+test.py
