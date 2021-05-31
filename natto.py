@@ -33,10 +33,8 @@ class natto():
     def __init__(self):
         self.start_ui()
         # logging.info('UI Shutdown...')
-        # self.current_doujin = ''
-        pass
 
-    
+# ##################################################################
     def simulate_io(self,secs):
         logging.info('Simulating IO operation , sleeping for %s second(s)',secs)
         time.sleep(secs)
@@ -56,9 +54,7 @@ class natto():
         else : 
             bad_run()
             time.sleep(1)
-        
-    
-    
+# ##################################################################
     def sanitize_foldername(self, folder_dirty):
         
         folder_clean = folder_dirty.replace("?","")
@@ -116,10 +112,10 @@ class natto():
         
         self.sauce_frame = LabelFrame(self.root, text='Sauce.', padx=10, pady=10)
         self.sauce_frame.grid(row=0, column=0, padx=10, pady=10, sticky="NSEW")
-        self.sauce_entry = Entry(self.sauce_frame, width=25)
+        self.sauce_entry = Entry(self.sauce_frame, width=20)
         self.sauce_entry.grid(row=0, column=0, sticky="W")
         self.sauce_entry.bind('<KeyPress-Return>',self.on_enter)
-        self.sauce_search_button = Button(self.sauce_frame, text="Search !", command=self.sauce_poured)
+        self.sauce_search_button = Button(self.sauce_frame, text="Search !", command=self.sauce_search_callback)
         self.sauce_search_button.grid(row=0, column=1, sticky="E", padx=5, pady=5)
         
         self.sauce_stat =  StringVar()
@@ -133,7 +129,7 @@ class natto():
         self.download_button.grid(row=0,column=0,sticky="NSEW")
         self.download_status = StringVar()
         self.download_status.set('-------------------')
-        self.download_status_label = Label(self.download_frame, textvar=self.download_status,wraplength=210,)
+        self.download_status_label = Label(self.download_frame, textvar=self.download_status,wraplength=210,justify="center")
         self.download_status_label.grid(row=1,column=0,sticky='W')
 
 
@@ -214,34 +210,38 @@ class natto():
         return False
 
     def download_button_callback(self):
-        to_download_pages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
+        to_download_pages = [1,2,3,4,5,6,7,8,9,10]
         downloaded_pages = []
         
         def downloading_status() : 
-            download_ongoing = True
-            while download_ongoing:
-                download_ongoing = t1.is_alive()
-                self.download_status.set(f'Downloaded pages : {downloaded_pages}\nPages to download : {to_download_pages}')
-                logging.debug('Download Thread Ongoing? %s',download_ongoing)
-                self.download_button.config(text="Downloading .  ")
+            search_ongoing = True
+            while search_ongoing:
+                search_ongoing = t1.is_alive()
+                self.download_status.set(f'Downloaded pages : {downloaded_pages}\n\nPages to download : {to_download_pages}')
+                logging.debug('Download Thread Ongoing? %s',search_ongoing)
+                # ☑☒
+                self.download_button.config(text="▀ Downloading... ▀")
                 time.sleep(0.5)
-                self.download_button.config(text="Downloading ..  ")
+                self.download_button.config(text="█ Downloading... █")
                 time.sleep(0.5)
-                self.download_button.config(text="Downloading ...  ")
+                self.download_button.config(text="▄ Downloading... ▄")
                 time.sleep(0.5)
-            self.download_button.config(text="Downloaded !  ")
+                self.download_button.config(text="  Downloading...  ")
+                time.sleep(0.5)
+            self.download_button.config(text=" ☑ Downloaded   ")
+            self.download_status.set(f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
         def threaded_download():
             # TODO: Change simulation to actual io operation 
             while len(to_download_pages) >= 1 : 
                 for i in to_download_pages:
                     try: 
                         self.simulate_io_realist()
-                        logging.info('Downloaded %s',i)
+                        logging.debug('Downloaded %s',i)
                         downloaded_pages.append(i)
                         to_download_pages.remove(i)
                     except ZeroDivisionError:
-                        # self.download_status.set(f'Error ...')
-                        logging.info('Error downloading %s',i)
+                        self.download_button.config(text=f'▒ Downloading... ▒ ')
+                        logging.debug('Error downloading %s',i)
 
         # dou = self.current_doujin
         # def download_pages ():
@@ -261,28 +261,61 @@ class natto():
         t1.start()
         t2.start()
 
-    
-    def sauce_poured (self):
-        logging.info(' System call : Sauce Click  ')
-        dou = self.get_doujin_data()
-        hope = True 
-        while hope :
-            logging.info('Child is alive %s',self.t3.is_alive())
-            time.sleep(2)
-            if self.t3.is_alive() == False : 
-                logging.info('Child is no longer alive ')
-                hope = False
-                self.sauce_stat.set('Done ... ')
-                logging.info('Data : %s',self.current_doujin)
+    def sauce_search_callback (self):
+        logging.info('Sauce search requested')
+        self.sauce_data = None
+        
+        def search_status ():
+            search_ongoing = True
+            while search_ongoing:
+                search_ongoing = t1.is_alive()
+
+                self.sauce_search_button.config(text="▀ Searching ... ▀")
+                time.sleep(0.5)
+                self.sauce_search_button.config(text="█ Searching... █")
+                time.sleep(0.5)
+                self.sauce_search_button.config(text="▄ Searching... ▄")
+                time.sleep(0.5)
+                self.sauce_search_button.config(text="  Searching...  ")
+                time.sleep(0.5)
+                
+            self.sauce_search_button.config(text=" ☑ Found   ")
+            # self.download_status.set(f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
+            pass
+        def threaded_search():
+            
+            while self.sauce_data == None: 
+                try: 
+                    self.simulate_io_realist()
+                    self.sauce_data = 0
+                    logging.debug('Search returned  ')
+                except ZeroDivisionError:
+                    logging.debug('Error Searching ')
+            pass
+        
+        
+        t1 = threading.Thread(target=threaded_search,daemon=True)
+        t2 = threading.Thread(target=search_status,daemon=True)
+        t1.start()
+        t2.start()
+        
+        pass
+        # logging.info(' System call : Sauce Click  ')
+        # dou = self.get_doujin_data()
+        # hope = True 
+        # while hope :
+        #     logging.info('Child is alive %s',self.t3.is_alive())
+        #     time.sleep(2)
+        #     if self.t3.is_alive() == False : 
+        #         logging.info('Child is no longer alive ')
+        #         hope = False
+        #         self.sauce_stat.set('Done ... ')
+        #         logging.info('Data : %s',self.current_doujin)
                 
                 
-                self.update_cover(self.current_doujin)
-                self.update_desc(self.current_doujin)
-                self.update_button(self.current_doujin)
-
-
-
-
+        #         self.update_cover(self.current_doujin)
+        #         self.update_desc(self.current_doujin)
+        #         self.update_button(self.current_doujin)
     
     def update_cover(self,dou):
         logging.info('System call : Update cover ')
@@ -329,11 +362,10 @@ class natto():
         print(dou.title(format=Format.Pretty))
 
     def on_enter(self,e):
-        self.sauce_poured()
+        self.sauce_search_callback()
 
     def start_mainloop(self):
 
-        
         logging.info('Tk MainLoop Started ')
         self.root.mainloop()
 
@@ -344,13 +376,8 @@ def test_sleep():
         time.sleep(1)
         print('Stopping sleep')
 
-
-
 if __name__ == '__main__' :
     nat = natto()
-    # t1 = threading.Thread(target=nat.start_ui)
-    # t1.start()
-    # t1.join()
 
 
 
