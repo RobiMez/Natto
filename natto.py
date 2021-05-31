@@ -8,6 +8,7 @@ import threading
 import socket
 import sys
 from random import randint
+import shutil
 
 
 
@@ -210,15 +211,22 @@ class natto():
         return False
 
     def download_button_callback(self):
-        to_download_pages = [1,2,3,4,5,6,7,8,9,10]
+        to_download_pages = []
         downloaded_pages = []
+        # populate the todownload if the sauce has been got 
+        logging.info("sauce to download %s",self.sauce_data.image_urls)
+        
+        if len(self.sauce_data.image_urls) > 0 :
+            for page in self.sauce_data.image_urls : 
+                # page.split(/)
+                to_download_pages.append(page.split("/")[-1])
         
         def downloading_status() : 
             search_ongoing = True
             while search_ongoing:
                 search_ongoing = t1.is_alive()
                 self.download_status.set(f'Downloaded pages : {downloaded_pages}\n\nPages to download : {to_download_pages}')
-                logging.debug('Download Thread Ongoing? %s',search_ongoing)
+                # logging.debug('Download Thread Ongoing? %s',search_ongoing)
                 # ☑☒
                 self.download_button.config(text="▀ Downloading... ▀")
                 time.sleep(0.5)
@@ -231,17 +239,37 @@ class natto():
             self.download_button.config(text=" ☑ Downloaded   ")
             self.download_status.set(f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
         def threaded_download():
-            # TODO: Change simulation to actual io operation 
+            if self.sauce_data : 
+                hentai_directory = f'./hentai/{self.sanitize_foldername(self.sauce_data.title(Format.Pretty))}'
+                os.mkdir(hentai_directory)
+                self.download_button.config(state=DISABLED)
+                self.sauce_search_button.config(state=DISABLED)
+
             while len(to_download_pages) >= 1 : 
-                for i in to_download_pages:
+                # if there are pages to download .
+                # create the directory to store them 
+                for i in self.sauce_data.image_urls:
+                    # for each of them 
                     try: 
-                        self.simulate_io_realist()
-                        logging.debug('Downloaded %s',i)
-                        downloaded_pages.append(i)
-                        to_download_pages.remove(i)
-                    except ZeroDivisionError:
+                        current_url = i
+                        response = requests.get(current_url, stream=True)
+                        if response.status_code == 200:
+                            with open(f"{hentai_directory}/{i.split('/')[-1]}", 'wb') as f:
+                                f.write(response.content)
+                                f.close()
+                        logging.debug('[ Downloaded ] %s',i)
+                        downloaded_pages.append(i.split('/')[-1])
+                        to_download_pages.remove(i.split('/')[-1])
+                    except Exception as e :
                         self.download_button.config(text=f'▒ Downloading... ▒ ')
-                        logging.debug('Error downloading %s',i)
+                        logging.debug('[ Dld Error ]:  %s ',e)
+                        
+            self.download_button.config(state=NORMAL)
+            self.sauce_search_button.config(state=NORMAL)
+
+
+
+
 
         # dou = self.current_doujin
         # def download_pages ():
@@ -271,29 +299,36 @@ class natto():
                 search_ongoing = t1.is_alive()
 
                 self.sauce_search_button.config(text="▀ Searching ... ▀")
-                time.sleep(0.5)
+                time.sleep(0.4)
                 self.sauce_search_button.config(text="█ Searching... █")
-                time.sleep(0.5)
+                time.sleep(0.2)
                 self.sauce_search_button.config(text="▄ Searching... ▄")
-                time.sleep(0.5)
+                time.sleep(0.4)
                 self.sauce_search_button.config(text="  Searching...  ")
-                time.sleep(0.5)
+                time.sleep(0.2)
                 
-            self.sauce_search_button.config(text=" ☑ Found   ")
-            # self.download_status.set(f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
-            pass
+            self.sauce_search_button.config(text="  Done   ")
+
         def threaded_search():
-            
+            logging.info('Threaded Search Started')
             while self.sauce_data == None: 
                 try: 
-                    self.simulate_io_realist()
-                    self.sauce_data = 0
-                    logging.debug('Search returned  ')
-                except ZeroDivisionError:
-                    logging.debug('Error Searching ')
-            pass
-        
-        
+                    sauce = self.sauce_entry.get()
+                    sauce_exists = Hentai.exists(sauce)
+                    if sauce_exists : 
+                        sauce_return = Hentai(sauce)
+                    else :
+                        self.sauce_stat.set('Sauce does not exist ')
+                        sauce_return = '404'
+                    self.sauce_data = sauce_return
+                    logging.debug('Search returned  %s',sauce_return)
+                except Exception as e :
+                    logging.debug('Error Searching %s',e)
+            # Display data to user if it exists 
+            if self.sauce_data != None or self.sauce_data != '404':
+                self.update_desc(self.sauce_data)
+
+
         t1 = threading.Thread(target=threaded_search,daemon=True)
         t2 = threading.Thread(target=search_status,daemon=True)
         t1.start()
@@ -311,8 +346,6 @@ class natto():
         #         hope = False
         #         self.sauce_stat.set('Done ... ')
         #         logging.info('Data : %s',self.current_doujin)
-                
-                
         #         self.update_cover(self.current_doujin)
         #         self.update_desc(self.current_doujin)
         #         self.update_button(self.current_doujin)
