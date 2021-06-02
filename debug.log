@@ -1,37 +1,20 @@
-2021-05-31 14:54:41,565 [ MainThread ] [ INFO ] Imports done 
-2021-05-31 14:54:41,687 [ MainThread ] [ INFO ] Working dir : C:\Users\25198\Desktop\Natto
-2021-05-31 14:54:41,690 [ MainThread ] [ INFO ] Hentai folder : True
-2021-05-31 14:54:41,690 [ MainThread ] [ INFO ] Hentai folder exists , All good .
-2021-05-31 14:54:41,707 [ MainThread ] [ INFO ] UI Started.
-2021-05-31 14:54:41,708 [ MainThread ] [ INFO ] Tk MainLoop Started 
-2021-05-31 14:54:44,389 [ MainThread ] [ INFO ] Sauce search requested
-2021-05-31 14:54:44,390 [ Thread-1 ] [ INFO ] Threaded Search Started
-2021-05-31 14:54:44,405 [ Thread-1 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:54:44,464 [ MainThread ] [ INFO ] Sauce search requested
-2021-05-31 14:54:44,465 [ Thread-3 ] [ INFO ] Threaded Search Started
-2021-05-31 14:54:44,470 [ Thread-3 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:54:45,331 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /g/654 HTTP/1.1" 301 0
-2021-05-31 14:54:45,612 [ Thread-3 ] [ DEBUG ] https://nhentai.net:443 "GET /g/654 HTTP/1.1" 301 0
-2021-05-31 14:54:45,613 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /g/654/ HTTP/1.1" 200 None
-2021-05-31 14:54:46,224 [ Thread-3 ] [ DEBUG ] https://nhentai.net:443 "GET /g/654/ HTTP/1.1" 200 None
-2021-05-31 14:54:46,280 [ Thread-1 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:54:46,540 [ Thread-3 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:54:47,453 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /api/gallery/654 HTTP/1.1" 200 None
-2021-05-31 14:54:47,454 [ Thread-1 ] [ DEBUG ] Search returned  (SC27) [Lyco-Z (Raikouji Aya)] Touhou Yawa. (Touhou Project)
-2021-05-31 14:54:50,164 [ Thread-3 ] [ DEBUG ] https://nhentai.net:443 "GET /api/gallery/654 HTTP/1.1" 200 None
-2021-05-31 14:54:50,168 [ Thread-3 ] [ DEBUG ] Search returned  (SC27) [Lyco-Z (Raikouji Aya)] Touhou Yawa. (Touhou Project)
-2021-05-31 14:54:55,630 [ MainThread ] [ INFO ] sauce to download ['https://i.nhentai.net/galleries/2148/1.jpg', 'https://i.nhentai.net/galleries/2148/2.jpg', 'https://i.nhentai.net/galleries/2148/3.jpg', 'https://i.nhentai.net/galleries/2148/4.jpg', 'https://i.nhentai.net/galleries/2148/5.jpg', 'https://i.nhentai.net/galleries/2148/6.jpg', 'https://i.nhentai.net/galleries/2148/7.jpg', 'https://i.nhentai.net/galleries/2148/8.jpg', 'https://i.nhentai.net/galleries/2148/9.jpg', 'https://i.nhentai.net/galleries/2148/10.jpg', 'https://i.nhentai.net/galleries/2148/11.jpg', 'https://i.nhentai.net/galleries/2148/12.jpg', 'https://i.nhentai.net/galleries/2148/13.jpg', 'https://i.nhentai.net/galleries/2148/14.jpg', 'https://i.nhentai.net/galleries/2148/15.jpg', 'https://i.nhentai.net/galleries/2148/16.jpg', 'https://i.nhentai.net/galleries/2148/17.jpg', 'https://i.nhentai.net/galleries/2148/18.jpg']
-2021-05-31 14:55:03,006 [ MainThread ] [ INFO ] Sauce search requested
-2021-05-31 14:55:03,012 [ Thread-7 ] [ INFO ] Threaded Search Started
-2021-05-31 14:55:03,017 [ Thread-7 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:55:03,588 [ Thread-7 ] [ DEBUG ] https://nhentai.net:443 "GET /g/67 HTTP/1.1" 301 0
-2021-05-31 14:55:04,395 [ Thread-7 ] [ DEBUG ] https://nhentai.net:443 "GET /g/67/ HTTP/1.1" 200 None
-2021-05-31 14:55:04,556 [ Thread-7 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
-2021-05-31 14:55:05,842 [ Thread-7 ] [ DEBUG ] https://nhentai.net:443 "GET /api/gallery/67 HTTP/1.1" 200 None
-2021-05-31 14:55:05,998 [ Thread-7 ] [ DEBUG ] Search returned  (C68) [TENGU NO TSUZURA (Kuro Tengu)] NERV no Ichiban Nagai Hi (Neon Genesis Evangelion)
-2021-05-31 14:55:10,850 [ MainThread ] [ INFO ] sauce to download ['https://i.nhentai.net/galleries/747/1.jpg', 'https://i.nhentai.net/galleries/747/2.jpg', 'https://i.nhentai.net/galleries/747/3.jpg', 'https://i.nhentai.net/galleries/747/4.jpg', 'https://i.nhentai.net/galleries/747/5.jpg', 'https://i.nhentai.net/galleries/747/6.jpg', 'https://i.nhentai.net/galleries/747/7.jpg', 'https://i.nhentai.net/galleries/747/8.jpg', 'https://i.nhentai.net/galleries/747/9.jpg', 'https://i.nhentai.net/galleries/747/10.jpg', 'https://i.nhentai.net/galleries/747/11.jpg', 'https://i.nhentai.net/galleries/747/12.jpg', 'https://i.nhentai.net/galleries/747/13.jpg', 'https://i.nhentai.net/galleries/747/14.jpg', 'https://i.nhentai.net/galleries/747/15.jpg', 'https://i.nhentai.net/galleries/747/16.jpg', 'https://i.nhentai.net/galleries/747/17.jpg', 'https://i.nhentai.net/galleries/747/18.jpg', 'https://i.nhentai.net/galleries/747/19.jpg', 'https://i.nhentai.net/galleries/747/20.jpg', 'https://i.nhentai.net/galleries/747/21.jpg', 'https://i.nhentai.net/galleries/747/22.jpg', 'https://i.nhentai.net/galleries/747/23.jpg', 'https://i.nhentai.net/galleries/747/24.jpg', 'https://i.nhentai.net/galleries/747/25.jpg', 'https://i.nhentai.net/galleries/747/26.jpg', 'https://i.nhentai.net/galleries/747/27.jpg', 'https://i.nhentai.net/galleries/747/28.jpg', 'https://i.nhentai.net/galleries/747/29.jpg', 'https://i.nhentai.net/galleries/747/30.jpg', 'https://i.nhentai.net/galleries/747/31.jpg', 'https://i.nhentai.net/galleries/747/32.jpg', 'https://i.nhentai.net/galleries/747/33.jpg', 'https://i.nhentai.net/galleries/747/34.jpg', 'https://i.nhentai.net/galleries/747/35.jpg', 'https://i.nhentai.net/galleries/747/36.jpg', 'https://i.nhentai.net/galleries/747/37.jpg', 'https://i.nhentai.net/galleries/747/38.jpg', 'https://i.nhentai.net/galleries/747/39.jpg', 'https://i.nhentai.net/galleries/747/40.jpg', 'https://i.nhentai.net/galleries/747/41.jpg', 'https://i.nhentai.net/galleries/747/42.jpg', 'https://i.nhentai.net/galleries/747/43.jpg', 'https://i.nhentai.net/galleries/747/44.jpg', 'https://i.nhentai.net/galleries/747/45.jpg', 'https://i.nhentai.net/galleries/747/46.jpg']
-2021-05-31 14:55:10,866 [ Thread-9 ] [ DEBUG ] Starting new HTTPS connection (1): i.nhentai.net:443
-2021-05-31 14:55:14,637 [ Thread-9 ] [ DEBUG ] https://i.nhentai.net:443 "GET /galleries/747/1.jpg HTTP/1.1" 200 227433
-2021-05-31 14:55:29,451 [ Thread-9 ] [ DEBUG ] [ Downloaded ] https://i.nhentai.net/galleries/747/1.jpg
-2021-05-31 14:55:29,456 [ Thread-9 ] [ DEBUG ] Starting new HTTPS connection (1): i.nhentai.net:443
-2021-05-31 14:55:31,109 [ Thread-9 ] [ DEBUG ] https://i.nhentai.net:443 "GET /galleries/747/2.jpg HTTP/1.1" 200 184163
+2021-06-01 09:02:23,370 [ MainThread ] [ INFO ] Imports done 
+2021-06-01 09:02:23,372 [ MainThread ] [ INFO ] [ Sys call ] __init__ 
+2021-06-01 09:02:23,374 [ MainThread ] [ INFO ] [ Sys call ] check_cwd
+2021-06-01 09:02:23,377 [ MainThread ] [ INFO ] Working dir : C:\Users\25198\Desktop\Natto
+2021-06-01 09:02:23,392 [ MainThread ] [ INFO ] Hentai folder : True
+2021-06-01 09:02:23,407 [ MainThread ] [ INFO ] Hentai folder exists , All good .
+2021-06-01 09:02:23,410 [ MainThread ] [ INFO ] [ Sys call ] start_ui
+2021-06-01 09:02:23,431 [ MainThread ] [ INFO ] [ Sys call ] ui_init
+2021-06-01 09:02:23,847 [ MainThread ] [ INFO ] [ Sys call ] add_ui_elements
+2021-06-01 09:02:23,860 [ MainThread ] [ INFO ] [ Sys call ] start_mainloop
+2021-06-01 09:02:23,872 [ MainThread ] [ INFO ] UI Started .
+2021-06-01 09:06:14,996 [ MainThread ] [ INFO ] [ Sys call ] sauce_search_callback
+2021-06-01 09:06:14,998 [ Thread-1 ] [ INFO ] Threaded Search Started
+2021-06-01 09:06:15,014 [ Thread-1 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
+2021-06-01 09:06:15,854 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /g/5432 HTTP/1.1" 301 0
+2021-06-01 09:06:16,240 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /g/5432/ HTTP/1.1" 200 None
+2021-06-01 09:06:16,876 [ Thread-1 ] [ DEBUG ] Starting new HTTPS connection (1): nhentai.net:443
+2021-06-01 09:06:17,468 [ Thread-1 ] [ DEBUG ] https://nhentai.net:443 "GET /api/gallery/5432 HTTP/1.1" 200 None
+2021-06-01 09:06:17,577 [ Thread-1 ] [ DEBUG ] Search returned  COMIC Megastore H 2007-05
+2021-06-01 09:06:17,578 [ Thread-1 ] [ INFO ] [ Sys call ] update_desc

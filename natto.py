@@ -8,13 +8,9 @@ import threading
 import socket
 import sys
 from random import randint
-import shutil
-
-
-
+# Tkinter and stuff 
 from tkinter import *
 from tkinter import ttk
-
 from PIL import Image
 from pathlib import Path
 from hentai import Hentai,Format
@@ -32,15 +28,17 @@ print('\n\n\n\n\n\n\n\n\n')
 logging.info('Imports done ')
 class natto():
     def __init__(self):
+        logging.info('[ Sys call ] __init__ ')
+        self.check_cwd()
         self.start_ui()
         # logging.info('UI Shutdown...')
 
-# ##################################################################
+    # ##################################################################
     def simulate_io(self,secs):
         logging.info('Simulating IO operation , sleeping for %s second(s)',secs)
         time.sleep(secs)
         logging.info('Simulating IO operation Done sleeping for %s second(s)',secs)
-    
+
     def simulate_io_realist(self):
         def good_run():
             # logging.info('Simulating Realistic IO operation Successful run ')
@@ -55,9 +53,10 @@ class natto():
         else : 
             bad_run()
             time.sleep(1)
-# ##################################################################
+    # ##################################################################
     def sanitize_foldername(self, folder_dirty):
-        
+        """Cleans up folder names from illegal characters."""
+        logging.info('[ Sys call ] sanitize_foldername')
         folder_clean = folder_dirty.replace("?","")
         folder_clean = folder_clean.replace(">","")
         folder_clean = folder_clean.replace("<","")
@@ -67,18 +66,19 @@ class natto():
         folder_clean = folder_clean.replace("|","")
         folder_clean = folder_clean.replace(":","")
         folder_clean = folder_clean.replace("\"","")
-
-        print(folder_dirty)
-        print(folder_clean)
+        
+        logging.debug('Sanitized : %s',folder_dirty)
+        logging.debug('Clean Filename :  %s',folder_dirty)
         return folder_clean
-    
+
     def start_ui(self):
-        self.app_init()
+        logging.info('[ Sys call ] start_ui')
+        self.ui_init()
         self.add_ui_elements()
-        logging.info('UI Started.')
         self.start_mainloop()
 
-    def app_init(self):
+    def ui_init(self):
+        logging.info('[ Sys call ] ui_init')
         self.root = Tk()
         self.app_width = 820
         self.app_height = 740
@@ -89,9 +89,9 @@ class natto():
         # window size and positioning
         self.root.geometry(f'{self.app_width}x{self.app_height}+{int(x/2)}+{int(y/2)}')
         self.root.title('Natto | Stay Degenerate ')
-        self.check_cwd()
 
     def check_cwd(self):
+        logging.info('[ Sys call ] check_cwd')
         # Check current filesys directory 
         wd = Path.cwd()
         logging.info('Working dir : %s',wd)
@@ -106,6 +106,7 @@ class natto():
         return True
 
     def add_ui_elements(self):
+        logging.info('[ Sys call ] add_ui_elements')
         # cover_image = PhotoImage(file='def.png')
         self.cover = Label(self.root, text=" --- Cover image --- ")
         cover_pos_x = (self.app_width/4)
@@ -168,57 +169,16 @@ class natto():
         self.tags.set('Tags : ')
         self.tags_label = Label(details_frame, textvar=self.tags,wraplength=250, justify="left")
         self.tags_label.grid(row=5, column=0, sticky="W")
-    
-    def get_doujin_data(self):
-        logging.info('Get doujin data.')
-        
-        sauce = self.sauce_entry.get()
-        if sauce == '':
-            self.sauce_stat.set('Gib sauce.')
-        else :
-            def get_hentai_data (): 
-                logging.info('Fetching hentai data ')
-                try:
-                    hentai_exists = Hentai.exists(sauce)
-                    logging.info('Hentai Exists : %s ',hentai_exists)
-                except TypeError as e :
-                    logging.error('Error : %s',e)
-                
-                hope = True
-                while hope:
-                    try:
-                        if hentai_exists :
-                            dou = Hentai(sauce)
-                            logging.debug(sauce)
-                            logging.debug(dou)
-                            hope = False
-                            self.current_doujin = dou
-                            logging.debug(self.current_doujin)
-                            logging.debug(dou)
-                            return dou
-                        else:
-                            self.sauce_stat.set('Bad sauce ')
-                            return 'Bad_sauce'
-                    except:
-                        self.sauce_stat.set('Temporary error ... Trying again.')
-                        return "Error"
-            
-            self.t3 = threading.Thread(target=get_hentai_data,daemon=True)
-            logging.info('Starting a thread to fetch data ')
-            self.sauce_stat.set('On it ...  ')
-            self.t3.start()
-        
-        return False
 
     def download_button_callback(self):
+        logging.info('[ Sys call ] download_button_callback')
         to_download_pages = []
         downloaded_pages = []
         # populate the todownload if the sauce has been got 
-        logging.info("sauce to download %s",self.sauce_data.image_urls)
+        logging.info("Sauce to download : %s",self.sauce_data.image_urls)
         
         if len(self.sauce_data.image_urls) > 0 :
             for page in self.sauce_data.image_urls : 
-                # page.split(/)
                 to_download_pages.append(page.split("/")[-1])
         
         def downloading_status() : 
@@ -238,6 +198,7 @@ class natto():
                 time.sleep(0.5)
             self.download_button.config(text=" ☑ Downloaded   ")
             self.download_status.set(f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
+        
         def threaded_download():
             if self.sauce_data : 
                 hentai_directory = f'./hentai/{self.sanitize_foldername(self.sauce_data.title(Format.Pretty))}'
@@ -246,7 +207,7 @@ class natto():
                 self.sauce_search_button.config(state=DISABLED)
 
             while len(to_download_pages) >= 1 : 
-                # if there are pages to download .
+                # If there are pages to download .
                 # create the directory to store them 
                 for i in self.sauce_data.image_urls:
                     # for each of them 
@@ -267,91 +228,62 @@ class natto():
             self.download_button.config(state=NORMAL)
             self.sauce_search_button.config(state=NORMAL)
 
-
-
-
-
-        # dou = self.current_doujin
-        # def download_pages ():
-        #     hope  = True
-        #     while hope:
-        #         print('Retrying ')
-        #         try:
-        #             dou.download(Path.cwd())
-        #             logging.info('Downloading ... ')
-        #             hope = False
-        #         except Exception as e : 
-        #             logging.warning('Internal chaos %s',e)
-
-
         t1 = threading.Thread(target=threaded_download,daemon=True)
         t2 = threading.Thread(target=downloading_status,daemon=True)
         t1.start()
         t2.start()
 
     def sauce_search_callback (self):
-        logging.info('Sauce search requested')
+        logging.info('[ Sys call ] sauce_search_callback')
         self.sauce_data = None
-        
         def search_status ():
-            search_ongoing = True
-            while search_ongoing:
-                search_ongoing = t1.is_alive()
+            if self.sauce_entry.get() == '':
+                self.sauce_stat.set('Gib sauce pls .')
+            else:
+                search_ongoing = True
+                while search_ongoing:
+                    search_ongoing = t1.is_alive()
 
-                self.sauce_search_button.config(text="▀ Searching ... ▀")
-                time.sleep(0.4)
-                self.sauce_search_button.config(text="█ Searching... █")
-                time.sleep(0.2)
-                self.sauce_search_button.config(text="▄ Searching... ▄")
-                time.sleep(0.4)
-                self.sauce_search_button.config(text="  Searching...  ")
-                time.sleep(0.2)
-                
-            self.sauce_search_button.config(text="  Done   ")
+                    self.sauce_search_button.config(text="▀ Searching ... ▀")
+                    time.sleep(0.4)
+                    self.sauce_search_button.config(text="█ Searching... █")
+                    time.sleep(0.2)
+                    self.sauce_search_button.config(text="▄ Searching... ▄")
+                    time.sleep(0.4)
+                    self.sauce_search_button.config(text=".  Searching...  .")
+                    time.sleep(0.2)
+                    
+                self.sauce_search_button.config(text="  Done   ")
 
         def threaded_search():
-            logging.info('Threaded Search Started')
-            while self.sauce_data == None: 
-                try: 
-                    sauce = self.sauce_entry.get()
-                    sauce_exists = Hentai.exists(sauce)
-                    if sauce_exists : 
-                        sauce_return = Hentai(sauce)
-                    else :
-                        self.sauce_stat.set('Sauce does not exist ')
-                        sauce_return = '404'
-                    self.sauce_data = sauce_return
-                    logging.debug('Search returned  %s',sauce_return)
-                except Exception as e :
-                    logging.debug('Error Searching %s',e)
-            # Display data to user if it exists 
-            if self.sauce_data != None or self.sauce_data != '404':
-                self.update_desc(self.sauce_data)
-
+            if self.sauce_entry.get() == '':
+                self.sauce_stat.set('Gib sauce pls .')
+            else:
+                logging.info('Threaded Search Started')
+                while self.sauce_data == None: 
+                    try: 
+                        sauce = self.sauce_entry.get()
+                        sauce_exists = Hentai.exists(sauce)
+                        if sauce_exists : 
+                            sauce_return = Hentai(sauce)
+                        else :
+                            self.sauce_stat.set('Sauce does not exist ')
+                            sauce_return = '404'
+                        self.sauce_data = sauce_return
+                        logging.debug('Search returned  %s',sauce_return)
+                    except Exception as e :
+                        logging.debug('Error Searching %s',e)
+                # Display data to user if it exists 
+                if self.sauce_data != None or self.sauce_data != '404':
+                    self.update_desc(self.sauce_data)
 
         t1 = threading.Thread(target=threaded_search,daemon=True)
         t2 = threading.Thread(target=search_status,daemon=True)
         t1.start()
         t2.start()
-        
-        pass
-        # logging.info(' System call : Sauce Click  ')
-        # dou = self.get_doujin_data()
-        # hope = True 
-        # while hope :
-        #     logging.info('Child is alive %s',self.t3.is_alive())
-        #     time.sleep(2)
-        #     if self.t3.is_alive() == False : 
-        #         logging.info('Child is no longer alive ')
-        #         hope = False
-        #         self.sauce_stat.set('Done ... ')
-        #         logging.info('Data : %s',self.current_doujin)
-        #         self.update_cover(self.current_doujin)
-        #         self.update_desc(self.current_doujin)
-        #         self.update_button(self.current_doujin)
-    
+
     def update_cover(self,dou):
-        logging.info('System call : Update cover ')
+        logging.info('[ Sys call ] update_cover')
         basewidth = 470
         def get_cover():
             logging.info('Downloading Cover image  ')
@@ -373,13 +305,13 @@ class natto():
         self.sauce_stat.set('Sauce poured')
 
     def update_button(self,dou):
-        print('System call : Update button ')
+        logging.info('[ Sys call ] update_button')
         self.sauce_frame.config(bg='whitesmoke')
         self.sauce_entry.config(bg='honeydew')
         self.sauce_search_button.config(bg='azure')
-    
+
     def update_desc(self,dou):
-        print('System call : Update description ')
+        logging.info('[ Sys call ] update_desc')
         self.sauce_id.set(dou.id)
         self.title.set(dou.title(format=Format.Pretty))
         self.title_jp.set(dou.title(format=Format.Japanese))
@@ -395,24 +327,16 @@ class natto():
         print(dou.title(format=Format.Pretty))
 
     def on_enter(self,e):
+        logging.info('[ Sys call ] on_enter')
         self.sauce_search_callback()
 
     def start_mainloop(self):
-
-        logging.info('Tk MainLoop Started ')
+        logging.info('[ Sys call ] start_mainloop')
+        logging.info('UI Started .')
         self.root.mainloop()
+        logging.info('UI Exit . ')
 
-
-def test_sleep():
-    for _ in range(5):
-        print('Starting sleep')
-        time.sleep(1)
-        print('Stopping sleep')
 
 if __name__ == '__main__' :
     nat = natto()
-
-
-
-
-
+    logging.info('Execution Finished  ')
