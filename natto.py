@@ -276,33 +276,66 @@ class natto():
                 # Display data to user if it exists 
                 if self.sauce_data != None or self.sauce_data != '404':
                     self.update_desc(self.sauce_data)
+                    self.update_cover(self.sauce_data)
 
         t1 = threading.Thread(target=threaded_search,daemon=True)
         t2 = threading.Thread(target=search_status,daemon=True)
         t1.start()
         t2.start()
 
-    def update_cover(self,dou):
-        logging.info('[ Sys call ] update_cover')
+    def update_cover (self,sauce_data):
+        logging.info('[ Sys call ] update_cover owo')
         basewidth = 470
-        def get_cover():
-            logging.info('Downloading Cover image  ')
-            im = Image.open(requests.get(dou.thumbnail, stream=True).raw)
-            wpercent = (basewidth/float(im.size[0]))
-            hsize = int((float(im.size[1])*float(wpercent)))
-            im = im.resize((basewidth,hsize), Image.ANTIALIAS)
-            logging.info('Saving Cover image  ')
-            im.save('cover.png')
-        t2 = threading.Thread(target=get_cover,daemon=True)
-        t2.start()
-        logging.info('Started cover download thread ')
-        t2.join()
-        print(' System notice : Cover downloaded ')
-        new_cover_image = PhotoImage(file='cover.png')
-        self.cover.config(image=new_cover_image)
-        self.cover.image = new_cover_image
-        print(' System notice : Cover Changed ')
-        self.sauce_stat.set('Sauce poured')
+        killswitch = True
+        print (self.sauce_data,killswitch)
+        while killswitch:
+            logging.info('[ owo ]')
+            if not self.sauce_data  :
+                self.sauce_stat.set('No sauce ?')
+                logging.info('sauce data unavailable for update cover scope ')
+                time.sleep(1)
+            else:
+                killswitch = False
+                logging.info('Updating cover image ')
+                # downloading cover image 
+                def get_cover():
+                    kill_switch = True
+                    while kill_switch : 
+                        try:
+                            logging.info('Downloading Cover image  ')
+                            self.cover.config(text='Downloading cover image ...')
+                            im = Image.open(requests.get(self.sauce_data.thumbnail, stream=True).raw)
+                            wpercent = (basewidth/float(im.size[0]))
+                            hsize = int((float(im.size[1])*float(wpercent)))
+                            im = im.resize((basewidth,hsize), Image.ANTIALIAS)
+                            logging.info('Saving Cover image  ')
+                            im.save('cover.png')
+                            cover_image = PhotoImage(file='cover.png')
+                            logging.info('displaying cover image')
+                            self.cover.config(image=cover_image)
+                            self.cover.image = cover_image
+                            logging.info('displayed cover image')
+                            kill_switch = False
+                        except Exception as e :
+                            logging.debug('Error Downloading cover image  %s',e)
+
+                t1 = threading.Thread(target=get_cover,daemon=True)
+                t1.start()
+
+    # def update_cover(self,dou):
+    #     logging.info('[ Sys call ] update_cover')
+
+
+    #     t2 = threading.Thread(target=get_cover,daemon=True)
+    #     t2.start()
+    #     logging.info('Started cover download thread ')
+    #     t2.join()
+    #     print(' System notice : Cover downloaded ')
+    #     new_cover_image = PhotoImage(file='cover.png')
+    #     self.cover.config(image=new_cover_image)
+    #     self.cover.image = new_cover_image
+    #     print(' System notice : Cover Changed ')
+    #     self.sauce_stat.set('Sauce poured')
 
     def update_button(self,dou):
         logging.info('[ Sys call ] update_button')
