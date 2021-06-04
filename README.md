@@ -4,4 +4,4 @@
 
 download the binary or clone repo , install deps and python natto.py
 
-[demo]: ./demo.jpg "demo"
+![demo](https://raw.githubusercontent.com/RobiMez/Natto/master/demo.jpg)
