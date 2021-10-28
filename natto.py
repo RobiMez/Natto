@@ -31,6 +31,7 @@ class natto():
         logging.info('[ Sys call ] __init__ ')
         self.check_cwd()
         self.start_ui()
+        self.cleanup_cover()
         # logging.info('UI Shutdown...')
 
     # ##################################################################
@@ -322,21 +323,6 @@ class natto():
                 t1 = threading.Thread(target=get_cover,daemon=True)
                 t1.start()
 
-    # def update_cover(self,dou):
-    #     logging.info('[ Sys call ] update_cover')
-
-
-    #     t2 = threading.Thread(target=get_cover,daemon=True)
-    #     t2.start()
-    #     logging.info('Started cover download thread ')
-    #     t2.join()
-    #     print(' System notice : Cover downloaded ')
-    #     new_cover_image = PhotoImage(file='cover.png')
-    #     self.cover.config(image=new_cover_image)
-    #     self.cover.image = new_cover_image
-    #     print(' System notice : Cover Changed ')
-    #     self.sauce_stat.set('Sauce poured')
-
     def update_button(self,dou):
         logging.info('[ Sys call ] update_button')
         self.sauce_frame.config(bg='whitesmoke')
@@ -369,6 +355,11 @@ class natto():
         self.root.mainloop()
         logging.info('UI Exit . ')
 
+    def cleanup_cover(self):
+        if os.path.exists("cover.png"):
+            os.remove("cover.png")
+        else:
+            pass
 
 if __name__ == '__main__' :
     nat = natto()

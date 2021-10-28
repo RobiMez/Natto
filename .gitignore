@@ -10,3 +10,6 @@ cover.png
 test.py
 debug.log
 *.png
+*.spec
+*.log
+cover.png
