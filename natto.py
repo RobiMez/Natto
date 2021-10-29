@@ -12,9 +12,9 @@ from tkinter import Button, Entry, StringVar
 from tkinter import PhotoImage
 from tkinter import DISABLED, NORMAL
 from pathlib import Path
-from PIL import Image
-import requests
-from hentai import Hentai, Format
+from PIL import Image #pylint: disable=E0401
+import requests #pylint: disable=E0401
+from hentai import Hentai, Format #pylint: disable=E0401
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -29,6 +29,7 @@ logging.info('Imports done ')
 
 
 class Natto():
+    """Natto class"""
     def __init__(self):
         """initialize class"""
         logging.info('[ Sys call ] __init__ ')
@@ -79,6 +80,7 @@ class Natto():
 
         logging.debug('Sanitized : %s', folder_dirty)
         logging.debug('Clean Filename :  %s', folder_dirty)
+        self.program_status = 'ok'
         return folder_clean
 
     def start_ui(self):
@@ -96,20 +98,20 @@ class Natto():
         self.app_height = 740
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        x = (screen_width / 2) - (self.app_width/2)+900
-        y = (screen_height / 2) - (self.app_height/2)
+        width = (screen_width / 2) - (self.app_width/2)+900
+        height = (screen_height / 2) - (self.app_height/2)
         # window size and positioning
         self.root.geometry(
-            f'{self.app_width}x{self.app_height}+{int(x/2)}+{int(y/2)}')
+            f'{self.app_width}x{self.app_height}+{int(width/2)}+{int(height/2)}')
         self.root.title('Natto | Stay Degenerate ')
 
     def check_cwd(self):
         """check the current working directory"""
         logging.info('[ Sys call ] check_cwd')
         # Check current filesys directory
-        wd = Path.cwd()
-        logging.info('Working dir : %s', wd)
-        hentai_folder_exists = Path.exists(Path.joinpath(wd, './hentai'))
+        working_dir = Path.cwd()
+        logging.info('Working dir : %s', working_dir)
+        hentai_folder_exists = Path.exists(Path.joinpath(working_dir, './hentai'))
         logging.info('Hentai folder : %s', hentai_folder_exists)
         if not hentai_folder_exists:
             print(
@@ -215,9 +217,10 @@ class Natto():
         def downloading_status():
             search_ongoing = True
             while search_ongoing:
-                search_ongoing = t1.is_alive()
+                search_ongoing = thread1.is_alive()
                 self.download_status.set(
-                    f'Downloaded pages : {downloaded_pages}\n\nPages to download : {to_download_pages}')
+                    f'Downloaded pages : {downloaded_pages}\n\n'
+                    'Pages to download : {to_download_pages}')
                 # logging.debug('Download Thread Ongoing? %s',search_ongoing)
                 # ☑☒
                 self.download_button.config(text="▀ Downloading... ▀")
@@ -230,7 +233,8 @@ class Natto():
                 time.sleep(0.5)
             self.download_button.config(text=" ☑ Downloaded   ")
             self.download_status.set(
-                f"Downloaded {len(downloaded_pages)} pages \n\n {downloaded_pages}  ")
+                f"Downloaded {len(downloaded_pages)} pages \n\n"
+                f" {downloaded_pages}  ")
 
         def threaded_download():
             if self.sauce_data:
@@ -248,24 +252,24 @@ class Natto():
                         current_url = i
                         response = requests.get(current_url, stream=True)
                         if response.status_code == 200:
-                            with open(f"{hentai_directory}/{i.split('/')[-1]}", 'wb') as f:
-                                f.write(response.content)
-                                f.close()
+                            with open(f"{hentai_directory}/{i.split('/')[-1]}", 'wb') as file:
+                                file.write(response.content)
+                                file.close()
                         logging.debug('[ Downloaded ] %s', i)
                         downloaded_pages.append(i.split('/')[-1])
                         to_download_pages.remove(i.split('/')[-1])
-                    except Exception as e:
+                    except Exception as err: # pylint: disable=broad-except
                         self.download_button.config(
                             text='▒ Downloading... ▒ ')
-                        logging.debug('[ Dld Error ]:  %s ', e)
+                        logging.debug('[ Dld Error ]:  %s ', err)
 
             self.download_button.config(state=NORMAL)
             self.sauce_search_button.config(state=NORMAL)
 
-        t1 = threading.Thread(target=threaded_download, daemon=True)
-        t2 = threading.Thread(target=downloading_status, daemon=True)
-        t1.start()
-        t2.start()
+        thread1 = threading.Thread(target=threaded_download, daemon=True)
+        thread2 = threading.Thread(target=downloading_status, daemon=True)
+        thread1.start()
+        thread2.start()
 
     def sauce_search_callback(self):
         """callback for sauce search"""
@@ -278,7 +282,7 @@ class Natto():
             else:
                 search_ongoing = True
                 while search_ongoing:
-                    search_ongoing = t1.is_alive()
+                    search_ongoing = thread1.is_alive()
 
                     self.sauce_search_button.config(text="▀ Searching ... ▀")
                     time.sleep(0.4)
@@ -314,10 +318,10 @@ class Natto():
                     self.update_desc(self.sauce_data)
                     self.update_cover()
 
-        t1 = threading.Thread(target=threaded_search, daemon=True)
-        t2 = threading.Thread(target=search_status, daemon=True)
-        t1.start()
-        t2.start()
+        thread1 = threading.Thread(target=threaded_search, daemon=True)
+        thread2 = threading.Thread(target=search_status, daemon=True)
+        thread1.start()
+        thread2.start()
 
     def update_cover(self):
         """Updates the cover """
@@ -342,25 +346,25 @@ class Natto():
                             logging.info('Downloading Cover image  ')
                             self.cover.config(
                                 text='Downloading cover image ...')
-                            im = Image.open(requests.get(
+                            img = Image.open(requests.get(
                                 self.sauce_data.thumbnail, stream=True).raw)
-                            wpercent = (basewidth/float(im.size[0]))
-                            hsize = int((float(im.size[1])*float(wpercent)))
-                            im = im.resize((basewidth, hsize), Image.ANTIALIAS)
+                            wpercent = (basewidth/float(img.size[0]))
+                            hsize = int((float(img.size[1])*float(wpercent)))
+                            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
                             logging.info('Saving Cover image  ')
-                            im.save('cover.png')
+                            img.save('cover.png')
                             cover_image = PhotoImage(file='cover.png')
                             logging.info('displaying cover image')
                             self.cover.config(image=cover_image)
                             self.cover.image = cover_image
                             logging.info('displayed cover image')
                             kill_switch = False
-                        except Exception as e:  # pylint: disable=broad-except
+                        except Exception as err:  # pylint: disable=broad-except
                             logging.debug(
-                                'Error Downloading cover image  %s', e)
+                                'Error Downloading cover image  %s', err)
 
-                t1 = threading.Thread(target=get_cover, daemon=True)
-                t1.start()
+                thread1 = threading.Thread(target=get_cover, daemon=True)
+                thread1.start()
 
     def update_button(self):
         """updates the button"""
@@ -386,7 +390,7 @@ class Natto():
         print(dou.json)
         print(dou.title(format=Format.Pretty))
 
-    def on_enter(self, e):
+    def on_enter(self):
         """callback on keyboard return key pressed"""
         logging.info('[ Sys call ] on_enter')
         self.sauce_search_callback()
