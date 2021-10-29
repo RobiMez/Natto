@@ -1,19 +1,19 @@
-# ... and he said " let there be time " python line 2:12
+"""Natto : Robel mezemir ( robi ) <robelmezemir@gmail.com>"""
+# ... and he said " let there be time " python line 3:12
 import time
 
 import logging
 import os
 import threading
-from random import randint
 # Tkinter and stuff
 from tkinter import Tk
-from tkinter import Label,LabelFrame
-from tkinter import Button,Entry,StringVar
+from tkinter import Label, LabelFrame
+from tkinter import Button, Entry, StringVar
 from tkinter import PhotoImage
-from tkinter import DISABLED,NORMAL
+from tkinter import DISABLED, NORMAL
+from pathlib import Path
 from PIL import Image
 import requests
-from pathlib import Path
 from hentai import Hentai, Format
 
 logging.basicConfig(
@@ -25,12 +25,12 @@ logging.basicConfig(
     ]
 )
 
-print('\n\n\n\n\n\n\n\n\n')
 logging.info('Imports done ')
 
 
-class natto():
+class Natto():
     def __init__(self):
+        """initialize class"""
         logging.info('[ Sys call ] __init__ ')
         # initializing attributes
         self.root = None
@@ -59,35 +59,10 @@ class natto():
         self.tags = None
         self.tags_label = None
         self.sauce_data = None
-
+        self.program_status = None
         self.check_cwd()
         self.start_ui()
         self.cleanup_cover()
-
-    def _simulate_io(self, secs):
-        """Simulates a perfect io operation"""
-        logging.info(
-            'Simulating IO operation , sleeping for %s second(s)', secs)
-        time.sleep(secs)
-        logging.info(
-            'Simulating IO operation Done sleeping for %s second(s)', secs)
-
-    def _simulate_io_realist(self):
-        """Simulates an errorable io operation"""
-        def good_run():
-            logging.info('Simulating Realistic IO operation Successful run ')
-            pass
-
-        def bad_run():
-            logging.info('Simulating Realistic IO operation Exception')
-            time.sleep(1)
-            raise ZeroDivisionError
-
-        if randint(1, 100) > 50:
-            good_run()
-            time.sleep(1)
-        else:
-            bad_run()
 
     def sanitize_foldername(self, folder_dirty):
         """Cleans up folder names from illegal characters."""
@@ -107,12 +82,14 @@ class natto():
         return folder_clean
 
     def start_ui(self):
+        """Starts the ui main loop"""
         logging.info('[ Sys call ] start_ui')
         self.ui_init()
         self.add_ui_elements()
         self.start_mainloop()
 
     def ui_init(self):
+        """initializes the ui"""
         logging.info('[ Sys call ] ui_init')
         self.root = Tk()
         self.app_width = 820
@@ -127,6 +104,7 @@ class natto():
         self.root.title('Natto | Stay Degenerate ')
 
     def check_cwd(self):
+        """check the current working directory"""
         logging.info('[ Sys call ] check_cwd')
         # Check current filesys directory
         wd = Path.cwd()
@@ -138,11 +116,13 @@ class natto():
                 "Can't find the Hentai folder near me \n"
                 "  Creating one at the current working directory ...")
             os.mkdir('hentai')
+            self.program_status = 'ok'
         else:
             logging.info("Hentai folder exists , All good .")
         return True
 
     def add_ui_elements(self):
+        """adds ui elements to tk"""
         logging.info('[ Sys call ] add_ui_elements')
         # cover_image = PhotoImage(file='def.png')
         self.cover = Label(self.root, text=" --- Cover image --- ")
@@ -221,6 +201,7 @@ class natto():
         self.tags_label.grid(row=5, column=0, sticky="W")
 
     def download_button_callback(self):
+        """Callback for download button"""
         logging.info('[ Sys call ] download_button_callback')
         to_download_pages = []
         downloaded_pages = []
@@ -275,7 +256,7 @@ class natto():
                         to_download_pages.remove(i.split('/')[-1])
                     except Exception as e:
                         self.download_button.config(
-                            text=f'▒ Downloading... ▒ ')
+                            text='▒ Downloading... ▒ ')
                         logging.debug('[ Dld Error ]:  %s ', e)
 
             self.download_button.config(state=NORMAL)
@@ -287,6 +268,7 @@ class natto():
         t2.start()
 
     def sauce_search_callback(self):
+        """callback for sauce search"""
         logging.info('[ Sys call ] sauce_search_callback')
         self.sauce_data = None
 
@@ -314,7 +296,7 @@ class natto():
                 self.sauce_stat.set('Gib sauce pls .')
             else:
                 logging.info('Threaded Search Started')
-                while self.sauce_data == None:
+                while self.sauce_data is None:
                     try:
                         sauce = self.sauce_entry.get()
                         sauce_exists = Hentai.exists(sauce)
@@ -328,22 +310,22 @@ class natto():
                     except Exception as e:
                         logging.debug('Error Searching %s', e)
                 # Display data to user if it exists
-                if self.sauce_data != None or self.sauce_data != '404':
+                if self.sauce_data is not None or self.sauce_data != '404':
                     self.update_desc(self.sauce_data)
-                    self.update_cover(self.sauce_data)
+                    self.update_cover()
 
         t1 = threading.Thread(target=threaded_search, daemon=True)
         t2 = threading.Thread(target=search_status, daemon=True)
         t1.start()
         t2.start()
 
-    def update_cover(self, sauce_data):
-        logging.info('[ Sys call ] update_cover owo')
+    def update_cover(self):
+        """Updates the cover """
+        logging.info('[ Sys call ] update_cover ')
         basewidth = 470
         killswitch = True
         print(self.sauce_data, killswitch)
         while killswitch:
-            logging.info('[ owo ]')
             if not self.sauce_data:
                 self.sauce_stat.set('No sauce ?')
                 logging.info('sauce data unavailable for update cover scope ')
@@ -373,20 +355,22 @@ class natto():
                             self.cover.image = cover_image
                             logging.info('displayed cover image')
                             kill_switch = False
-                        except Exception as e:
+                        except Exception as e:  # pylint: disable=broad-except
                             logging.debug(
                                 'Error Downloading cover image  %s', e)
 
                 t1 = threading.Thread(target=get_cover, daemon=True)
                 t1.start()
 
-    def update_button(self, dou):
+    def update_button(self):
+        """updates the button"""
         logging.info('[ Sys call ] update_button')
         self.sauce_frame.config(bg='whitesmoke')
         self.sauce_entry.config(bg='honeydew')
         self.sauce_search_button.config(bg='azure')
 
     def update_desc(self, dou):
+        """updates the description"""
         logging.info('[ Sys call ] update_desc')
         self.sauce_id.set(dou.id)
         self.title.set(dou.title(format=Format.Pretty))
@@ -403,22 +387,26 @@ class natto():
         print(dou.title(format=Format.Pretty))
 
     def on_enter(self, e):
+        """callback on keyboard return key pressed"""
         logging.info('[ Sys call ] on_enter')
         self.sauce_search_callback()
 
     def start_mainloop(self):
+        """starts the main loop"""
         logging.info('[ Sys call ] start_mainloop')
         logging.info('UI Started .')
         self.root.mainloop()
         logging.info('UI Exit . ')
 
     def cleanup_cover(self):
+        """cleans up cover.png"""
         if os.path.exists("cover.png"):
             os.remove("cover.png")
+            self.program_status = 'ok'
         else:
             pass
 
 
 if __name__ == '__main__':
-    nat = natto()
+    nat = Natto()
     logging.info('Execution Finished  ')
