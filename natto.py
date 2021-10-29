@@ -3,15 +3,16 @@ import time
 
 import logging
 import os
-import requests
 import threading
-import socket
-import sys
 from random import randint
 # Tkinter and stuff
-from tkinter import *
-from tkinter import ttk
+from tkinter import Tk
+from tkinter import Label,LabelFrame
+from tkinter import Button,Entry,StringVar
+from tkinter import PhotoImage
+from tkinter import DISABLED,NORMAL
 from PIL import Image
+import requests
 from pathlib import Path
 from hentai import Hentai, Format
 
@@ -31,6 +32,34 @@ logging.info('Imports done ')
 class natto():
     def __init__(self):
         logging.info('[ Sys call ] __init__ ')
+        # initializing attributes
+        self.root = None
+        self.app_width = None
+        self.app_height = None
+        self.cover = None
+        self.sauce_frame = None
+        self.sauce_entry = None
+        self.sauce_search_button = None
+        self.sauce_stat = None
+        self.sauce_stat_label = None
+        self.download_frame = None
+        self.download_button = None
+        self.download_status = None
+        self.download_status_label = None
+        self.sauce_id = None
+        self.sauce_label = None
+        self.title = None
+        self.title_label = None
+        self.title_jp = None
+        self.title_jp_label = None
+        self.title_en = None
+        self.title_en_label = None
+        self.pages = None
+        self.pages_label = None
+        self.tags = None
+        self.tags_label = None
+        self.sauce_data = None
+
         self.check_cwd()
         self.start_ui()
         self.cleanup_cover()
