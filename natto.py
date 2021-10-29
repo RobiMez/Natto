@@ -12,9 +12,9 @@ from tkinter import Button, Entry, StringVar
 from tkinter import PhotoImage
 from tkinter import DISABLED, NORMAL
 from pathlib import Path
-from PIL import Image #pylint: disable=E0401
-import requests #pylint: disable=E0401
-from hentai import Hentai, Format #pylint: disable=E0401
+from PIL import Image  # pylint: disable=E0401
+import requests  # pylint: disable=E0401
+from hentai import Hentai, Format  # pylint: disable=E0401
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -28,8 +28,9 @@ logging.basicConfig(
 logging.info('Imports done ')
 
 
-class Natto():
+class Natto():# pylint: disable=too-many-instance-attributes
     """Natto class"""
+
     def __init__(self):
         """initialize class"""
         logging.info('[ Sys call ] __init__ ')
@@ -111,7 +112,8 @@ class Natto():
         # Check current filesys directory
         working_dir = Path.cwd()
         logging.info('Working dir : %s', working_dir)
-        hentai_folder_exists = Path.exists(Path.joinpath(working_dir, './hentai'))
+        hentai_folder_exists = Path.exists(
+            Path.joinpath(working_dir, './hentai'))
         logging.info('Hentai folder : %s', hentai_folder_exists)
         if not hentai_folder_exists:
             print(
@@ -238,7 +240,9 @@ class Natto():
 
         def threaded_download():
             if self.sauce_data:
-                hentai_directory = f'./hentai/{self.sanitize_foldername(self.sauce_data.title(Format.Pretty))}'
+                foldername = self.sanitize_foldername(
+                    self.sauce_data.title(Format.Pretty))
+                hentai_directory = f'./hentai/{foldername}'
                 os.mkdir(hentai_directory)
                 self.download_button.config(state=DISABLED)
                 self.sauce_search_button.config(state=DISABLED)
@@ -258,7 +262,7 @@ class Natto():
                         logging.debug('[ Downloaded ] %s', i)
                         downloaded_pages.append(i.split('/')[-1])
                         to_download_pages.remove(i.split('/')[-1])
-                    except Exception as err: # pylint: disable=broad-except
+                    except Exception as err:  # pylint: disable=broad-except
                         self.download_button.config(
                             text='▒ Downloading... ▒ ')
                         logging.debug('[ Dld Error ]:  %s ', err)
@@ -311,8 +315,8 @@ class Natto():
                             sauce_return = '404'
                         self.sauce_data = sauce_return
                         logging.debug('Search returned  %s', sauce_return)
-                    except Exception as e:
-                        logging.debug('Error Searching %s', e)
+                    except Exception as err:  # pylint: disable=broad-except
+                        logging.debug('Error Searching %s', err)
                 # Display data to user if it exists
                 if self.sauce_data is not None or self.sauce_data != '404':
                     self.update_desc(self.sauce_data)
@@ -350,7 +354,8 @@ class Natto():
                                 self.sauce_data.thumbnail, stream=True).raw)
                             wpercent = (basewidth/float(img.size[0]))
                             hsize = int((float(img.size[1])*float(wpercent)))
-                            img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+                            img = img.resize(
+                                (basewidth, hsize), Image.ANTIALIAS)
                             logging.info('Saving Cover image  ')
                             img.save('cover.png')
                             cover_image = PhotoImage(file='cover.png')
